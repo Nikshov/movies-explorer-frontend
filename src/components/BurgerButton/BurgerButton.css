@@ -1,0 +1,32 @@
+.burger-button_open {
+  display: none;
+}
+
+@media screen and (max-width: 785px) {
+  .burger-button_open {
+    width: 44px;
+    height: 44px;
+    background: url('../../images/openBurger.svg') center no-repeat;
+    display: block;
+    border: none;
+    cursor: pointer;
+  }
+
+  .burger-button_close {
+    position: fixed;
+    right: 35px;
+    width: 22px;
+    height: 22px;
+    background: transparent url('../../images/closeBurger.svg') center no-repeat;
+    z-index: 2;
+    border: none;
+    cursor: pointer;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .burger-button_open {
+    width: 40px;
+    height: 43px;
+  }
+}

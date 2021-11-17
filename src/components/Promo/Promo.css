@@ -1,0 +1,38 @@
+.promo {
+  background: #465dff no-repeat center url('../../images/promo__logo.svg');
+  width: 100%;
+  height: 524px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.promo__title {
+  display: flex;
+  margin: 0;
+  font-weight: 400;
+  font-size: 50px;
+  line-height: 58px;
+  text-align: center;
+  letter-spacing: -0.04em;
+  max-width: 730px;
+
+  color: #fff;
+}
+
+@media screen and (max-width: 800px) {
+  .promo {
+    height: 784px;
+  }
+}
+
+@media screen and (max-width: 490px) {
+  .promo {
+    background-image: url('../../images/promo__logo-small.svg');
+    height: 570px;
+  }
+  .promo__title {
+    font-size: 31px;
+    line-height: 39px;
+  }
+}

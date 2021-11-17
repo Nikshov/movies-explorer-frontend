@@ -1,0 +1,14 @@
+#root {
+  max-width: 1280px;
+  height: 100%;
+  display: flex;
+  margin: auto;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  min-width: 320px;
+  font-family: 'Inter', 'Arial', sans-serif;
+  color: #000;
+  text-rendering: optimizeLegibility;
+  background: #fff;
+}
