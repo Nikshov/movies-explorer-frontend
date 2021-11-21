@@ -1,0 +1,65 @@
+.short-film {
+  height: 25px;
+  display: flex;
+  justify-content: center;
+}
+
+.short-film__checkbox {
+  display: none;
+}
+
+.short-film__checkbox + .short-film__label {
+  cursor: pointer;
+  padding: 1px 0 0 50px;
+  position: relative;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.short-film__checkbox + .short-film__label::before {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  vertical-align: middle;
+  padding: 0;
+  height: 20px;
+  width: 36px;
+  margin: 0 5px 0 0;
+  border-radius: 20px;
+  background: #dddddd;
+}
+
+.short-film__checkbox + .short-film__label::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.short-film__checkbox + .short-film__label::before,
+.short-film__checkbox + .short-film__label::after {
+  -webkit-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+}
+
+.short-film__checkbox:checked + .short-film__label::before {
+  background: #2be080;
+}
+.short-film__checkbox:checked + .short-film__label::after {
+  left: 22px;
+}
+
+@media screen and (max-width: 500px) {
+  .short-film__checkbox + .short-film__label {
+    font-size: 11px;
+  }
+}
