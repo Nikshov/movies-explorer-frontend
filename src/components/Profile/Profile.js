@@ -4,9 +4,11 @@ import Header from '../Header/Header';
 import CurrentUserContext from '../../contexts/UserContext';
 
 function Profile({ handleUpdateUser, onSignOut, }) {
-  const [name, setName] = React.useState('');
-  const [email, setEmail] = React.useState('');
   const currentUser = React.useContext(CurrentUserContext);
+  const [name, setName] = React.useState(currentUser.name);
+  const [email, setEmail] = React.useState(currentUser.email);
+  
+
   
   function handleChangeEmail(evt) {
     setEmail(evt.target.value);
