@@ -16,13 +16,11 @@ function Profile({ handleUpdateUser, onSignOut, }) {
     setName(evt.target.value);
   }
 
-  function handleSubmit(evt) {
-    evt.preventDefault();
+  function handleSubmit() {
     handleUpdateUser(email, name);
   }
 
   function handleLogout(evt) {
-    evt.preventDefault();
     onSignOut();
   }
 
@@ -65,7 +63,7 @@ function Profile({ handleUpdateUser, onSignOut, }) {
             />
           </fieldset>
         </form>
-        <button className="profile__edit-button" type="submit">
+        <button onClick={handleSubmit} className="profile__edit-button" type="submit">
           Редактировать
         </button>
         <button className="profile__signout-button" onClick={handleLogout} type="button">Выйти из аккаунта</button>
