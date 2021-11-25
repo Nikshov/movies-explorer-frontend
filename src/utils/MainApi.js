@@ -100,8 +100,8 @@ export function addMovie({
   year,
   description,
   image,
-  trailer,
-  movieId,
+  trailerLink,
+  id,
   nameRU, nameEN
 }) {
   return fetch(`${mainApiBaseUrl}/movies`, {
@@ -117,9 +117,9 @@ export function addMovie({
       year: year,
       description: description,
       image: `https://api.nomoreparties.co${image.url}`,
-      trailer: trailer,
+      trailer: trailerLink,
       thumbnail: `https://api.nomoreparties.co${image.formats.thumbnail.url}`,
-      movieId: movieId,
+      movieId: id,
       nameRU: nameRU,
       nameEN: nameEN,
     }),
