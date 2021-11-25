@@ -76,7 +76,6 @@ export function updateUser(email, name) {
     body: JSON.stringify({
       email: email,
       name: name,
-
     }),
     credentials: 'include',
   }).then(res => checkResponse(res));
