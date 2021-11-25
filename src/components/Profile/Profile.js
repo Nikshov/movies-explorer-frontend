@@ -1,10 +1,12 @@
 import React from 'react';
 import './Profile.css'
 import Header from '../Header/Header';
+import CurrentUserContext from '../contexts/CurrentUserContext';
 
 function Profile({ handleUpdateUser, onSignOut }) {
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
+  const currentUser = React.useContext(CurrentUserContext);
   
   function handleChangeEmail(evt) {
     setEmail(evt.target.value);
@@ -28,7 +30,7 @@ function Profile({ handleUpdateUser, onSignOut }) {
     <>
       <Header />
       <section className="profile">
-        <h2 className="profile__title">Привет, Виталий!</h2>
+        <h2 className="profile__title">Привет, {currentUser.name}!</h2>
         <form className="profile__form" onSubmit={handleSubmit} name="profile-form">
           <fieldset className="profile__input-container">
             <label className="profile__input-label" htmlFor="name-user">
@@ -37,7 +39,7 @@ function Profile({ handleUpdateUser, onSignOut }) {
             <input
               className="profile__input"
               onChange={handleChangeName}
-              value={name || ''}
+              value={name || currentUser.name}
               placeholder="Имя"
               type="text"
               name="name-user"
@@ -53,7 +55,7 @@ function Profile({ handleUpdateUser, onSignOut }) {
             <input
               className="profile__input"
               onChange={handleChangeEmail}
-              value={email || ''}
+              value={email || currentUser.email}
               placeholder="E-mail"
               type="email"
               name="name-user"
