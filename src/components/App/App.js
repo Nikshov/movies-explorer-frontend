@@ -190,7 +190,7 @@ function App() {
   }
 
   function removeFav(card) {
-    removeMovie(id)ж
+    removeMovie(card);
   }
 
   function toggle() {
