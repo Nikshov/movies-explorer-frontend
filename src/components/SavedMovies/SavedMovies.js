@@ -4,6 +4,7 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Header from '../Header/Header';
 import Footer from "./../Footer/Footer";
 import Preloader from '../Preloader/Preloader';
+import './SavedMovies.css';
 
 export default function SavedMovies({ searchMovie, toggle, cards, isLoading, onCardDelete, onCardLike }) {
   return (
