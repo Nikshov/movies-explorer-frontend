@@ -8,7 +8,7 @@ function MoviesCard({ isSaved, card, onCardLike, onCardDel }) {
 
   function handleLikeClick() {
     console.log(card, "SUUUUUUC");
-    /* onCardLike(card); */
+    onCardLike(card);
   }
 
   function handleDelClick() {
