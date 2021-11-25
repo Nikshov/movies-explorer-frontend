@@ -6,6 +6,7 @@ import { useLocation, Link } from 'react-router-dom';
 import BurgerButton from '../BurgerButton/BurgerButton';
 
 function Header() {
+
   const [isBurgerOpen, setIsBurgerOpen] = React.useState(false);
   function burgerToggle() {
     setIsBurgerOpen(!isBurgerOpen);

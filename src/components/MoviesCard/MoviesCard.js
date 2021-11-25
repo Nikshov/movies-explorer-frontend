@@ -1,26 +1,34 @@
 import React from 'react';
 import './MoviesCard.css';
-import img from '../../images/imgCARD.jpg';
 import { useLocation } from 'react-router-dom';
 
-function MoviesCard({ isSaved }) {
+function MoviesCard({ isSaved, card, onCardLike, onCardDel }) {
   const location = useLocation();
+
+
+  function handleLikeClick() {
+    onCardLike(card);
+  }
+
+  function handleDelClick() {
+    onCardDel(card);
+  }
 
   return (
     <div className='card'>
       <div className='card__head-container'>
         <div className='card__info'>
-        <h2 className='card__title'>33 слова о дизайне</h2>
-        <p className='card__duration'>1ч 47м</p>
+          <h2 className='card__title'>{card.nameRU ? card.nameRU : card.nameEN }</h2>
+        <p className='card__duration'>Длительность: {card.duration ? card.duration : '' } мин</p>
         </div>
       {location.pathname === '/movies' ? (
-          <button className={`card__button card__fav-button ${isSaved && 'card__fav-button_active'}`} />
+          <button onClick={handleLikeClick} className={`card__button card__fav-button ${isSaved && 'card__fav-button_active'}`} />
         ) : (
-          <button className='card__delete-button card__button' />
+          <button onClick={handleDelClick} className='card__delete-button card__button' />
         )}
       
         </div>
-        <img className='card__img' src={ img } alt='обложка фильма' />
+        <img className='card__img' src={`https://api.nomoreparties.co${card.image.url}`} alt='обложка фильма' />
       
     </div>
   );

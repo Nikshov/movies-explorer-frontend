@@ -1,17 +1,25 @@
 import "./MoviesCardList.css";
-import MoviesCard from "../MoviesCard/MoviesCard"
+import MoviesCard from "../MoviesCard/MoviesCard";
 
-function MoviesCardList() {
+
+function MoviesCardList({cards, onCardDelete, onCardLike}) {
+  const isSaved = false;
   return (
     <section className="cardList">
       <div className="cardList__container">
-        <MoviesCard />
-        <MoviesCard isSaved={true}/>
-        <MoviesCard />
-        <MoviesCard />
-        <MoviesCard isSaved={true}/>
-        <MoviesCard />
-        <MoviesCard />
+        { cards.length > 0 ? <>(
+          {
+            cards.map(card => (
+          <MoviesCard
+            card={card}
+            key={ card.id }
+            isSaved={ isSaved }
+            onCardLike={onCardLike}
+            onCardDelete={onCardDelete}
+          />
+            )) }) </>
+      : '' }
+        
       </div>
       <button className="cardList__moar-button">Ещё</button>
     </section>

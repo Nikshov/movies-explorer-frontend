@@ -1,8 +1,28 @@
 import './Register.css';
+import React from 'react';
 import { Link } from "react-router-dom";
 import Logo from '../Logo/Logo';
 
-function Register() {
+function Register({signup}) {
+  const [password, setPassword] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [name, setName] = React.useState('');
+
+  function handleEmailChange(evt) {
+    setEmail(evt.target.value);
+  }
+
+  function handlePasswordChange(evt) {
+    setPassword(evt.target.value);
+  }
+  function handleNameChange(evt) {
+    setName(evt.target.value);
+  }
+
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    signup({ password: password , email: email, name: name });
+  }
 
   return (
     <section className="register">
@@ -11,12 +31,14 @@ function Register() {
         <h1 className="register__greeting">Добро пожаловать!</h1>
       </div>
 
-      <form className="register__form">
+      <form className="register__form" onSubmit={handleSubmit}>
         <span className="register__input-span">Имя</span>
         <input
           className="register__input"
           name="name"
           type="text"
+          value={name || ''}
+          onChange={handleNameChange}
           required
           autoComplete="off"
         ></input>
@@ -26,6 +48,8 @@ function Register() {
           className="register__input"
           name="email"
           type="email"
+          value={ email || '' }
+          onChange={handleEmailChange}
           required
           autoComplete="off"
         ></input>
@@ -35,6 +59,8 @@ function Register() {
           className="register__input register__input_error"
           name="password"
           type="password"
+          value={password || ''}
+          onChange={handlePasswordChange}
           required
           autoComplete="off"
         ></input>

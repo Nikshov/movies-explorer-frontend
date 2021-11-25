@@ -2,14 +2,18 @@ import React from 'react';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import './SearchForm.css'
 
-function SearchForm() {
+function SearchForm({searchMovie, toggle}) {
+  const [value, setValue] = React.useState('');
+  
+
 
   function handleChange(evt) {
-    evt.preventDefault();
+      setValue(evt.target.value);
   }
 
   function handleSubmit(evt) {
     evt.preventDefault();
+    searchMovie(value.toString().toLowerCase());
   }
   return (
     <section className="search-form">
@@ -17,7 +21,7 @@ function SearchForm() {
         <div className="search-form__input-wrapper">
           <input
             className="search-form__input"
-            value=''
+            value={value || ''}
             type="text"
             placeholder="Фильм"
             name="movieName"
@@ -29,7 +33,7 @@ function SearchForm() {
         </div>
         <button className="search-form__btn" type="submit"></button>
       </form>
-      <FilterCheckbox />
+      <FilterCheckbox toggle={toggle} />
       <div className="search-form__decor-line"></div>
     </section>
   );
