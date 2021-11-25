@@ -26,7 +26,7 @@ import { Auth } from '../../utils/Auth';
 
 function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
-  const [currentUser, setCurrentUser] = React.useState(React.useContext(UserContext));
+  const [currentUser, setCurrentUser] = React.useState({});
   const [isShort, setIsShort] = React.useState(false);
   const [searchResult, setSearchResult] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -44,13 +44,12 @@ function App() {
         .then(() => {
           setLoggedIn(true);
           navigate('/movies');
+          getUser().then((user) => {
+            setCurrentUser({ email: user.email, name: user.name }).catch((err) => console.log(err));
+          });
         })
         .catch((err) => console.log(err));
   }, [loggedIn, navigate]);
-
-  React.useEffect(() => {
-    console.log(isShort);
-  }, [isShort]);
 
   async function initMoviesLists() {
     await getMoviesList()
@@ -186,9 +185,11 @@ function App() {
   }
 
   function removeFav(card) {
-    removeMovie(card._id).then((suc) => console.log('DELETED!') ).catch((error) => {
-      console.log(error);
-    });
+    removeMovie(card._id)
+      .then((suc) => console.log('DELETED!'))
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   function toggle() {
@@ -229,13 +230,12 @@ function App() {
   }
 
   function handleUpdateUser(name, email) {
-      updateUser(name, email)
+    updateUser(name, email)
       .then((res) => {
-        setCurrentUser(res)
+        setCurrentUser(res);
       })
-      .catch((err) =>
-        console.log("ERORR", err))
-  };
+      .catch((err) => console.log('ERORR', err));
+  }
 
   return (
     <UserContext.Provider value={currentUser}>
@@ -261,7 +261,7 @@ function App() {
           path='/profile'
           element={
             <Auth redirectTo='/signin' loggedIn={loggedIn}>
-              <Profile handleUpdateUser={ handleUpdateUser} onSignOut={onSignOut} />
+              <Profile handleUpdateUser={handleUpdateUser} onSignOut={onSignOut} />
             </Auth>
           }></Route>
         <Route

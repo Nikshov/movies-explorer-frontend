@@ -3,7 +3,7 @@ import './Profile.css'
 import Header from '../Header/Header';
 import CurrentUserContext from '../../contexts/UserContext';
 
-function Profile({ handleUpdateUser, onSignOut }) {
+function Profile({ handleUpdateUser, onSignOut, }) {
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const currentUser = React.useContext(CurrentUserContext);
