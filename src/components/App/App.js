@@ -228,6 +228,15 @@ function App() {
       .catch((err) => console.log(err));
   }
 
+  function handleUpdateUser(name, email) {
+      updateUser(name, email)
+      .then((res) => {
+        setCurrentUser(res)
+      })
+      .catch((err) =>
+        console.log("ERORR", err))
+  };
+
   return (
     <UserContext.Provider value={currentUser}>
       <Routes>
@@ -252,7 +261,7 @@ function App() {
           path='/profile'
           element={
             <Auth redirectTo='/signin' loggedIn={loggedIn}>
-              <Profile />
+              <Profile handleUpdateUser={ handleUpdateUser} onSignOut={onSignOut} />
             </Auth>
           }></Route>
         <Route

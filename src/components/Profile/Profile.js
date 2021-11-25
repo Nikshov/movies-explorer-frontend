@@ -2,13 +2,26 @@ import React from 'react';
 import './Profile.css'
 import Header from '../Header/Header';
 
-function Profile() {
-  function handleChange(evt) {
-    evt.preventDefault();
+function Profile({ handleUpdateUser, onSignOut }) {
+  const [name, setName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  
+  function handleChangeEmail(evt) {
+    setEmail(evt.target.value);
+  }
+
+  function handleChangeName(evt) {
+    setName(evt.target.value);
   }
 
   function handleSubmit(evt) {
     evt.preventDefault();
+    handleUpdateUser(email, name);
+  }
+
+  function handleLogout(evt) {
+    evt.preventDefault();
+    onSignOut();
   }
 
   return (
@@ -23,8 +36,8 @@ function Profile() {
             </label>
             <input
               className="profile__input"
-              onChange={handleChange}
-              value='Виталий'
+              onChange={handleChangeName}
+              value={name || ''}
               placeholder="Имя"
               type="text"
               name="name-user"
@@ -39,8 +52,8 @@ function Profile() {
             </label>
             <input
               className="profile__input"
-              onChange={handleChange}
-              value='pochta@yandex.ru'
+              onChange={handleChangeEmail}
+              value={email || ''}
               placeholder="E-mail"
               type="email"
               name="name-user"
@@ -53,7 +66,7 @@ function Profile() {
         <button className="profile__edit-button" type="submit">
           Редактировать
         </button>
-        <button className="profile__signout-button" type="button">Выйти из аккаунта</button>
+        <button className="profile__signout-button" onClick={handleLogout} type="button">Выйти из аккаунта</button>
       </section>
     </>
   );
