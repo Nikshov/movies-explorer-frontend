@@ -1,6 +1,6 @@
 import './App.css';
 import React from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 
 import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
@@ -24,7 +24,7 @@ import { getMoviesList } from '../../utils/MoviesApi';
 import UserContext from '../../contexts/UserContext';
 import { Auth } from '../../utils/Auth';
 
-function App() {
+function App() {  
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState(React.useContext(UserContext));
   const [isShort, setIsShort] = React.useState(false);

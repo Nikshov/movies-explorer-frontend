@@ -7,7 +7,7 @@ function MoviesCardList({cards, onCardDelete, onCardLike}) {
   return (
     <section className="cardList">
       <div className="cardList__container">
-        { cards.length > 0 ? <>(
+        { cards.length > 0 ? <>
           {
             cards.map(card => (
           <MoviesCard
@@ -17,7 +17,7 @@ function MoviesCardList({cards, onCardDelete, onCardLike}) {
             onCardLike={onCardLike}
             onCardDelete={onCardDelete}
           />
-            )) }) </>
+            )) } </>
       : '' }
         
       </div>
