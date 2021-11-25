@@ -159,8 +159,8 @@ function App() {
       year,
       description,
       image,
-      trailer,
-      movieId,
+      trailerLink,
+      id,
       nameRU,
       nameEN,
     } = card;
@@ -171,8 +171,8 @@ function App() {
       year,
       description,
       image,
-      trailer,
-      movieId,
+      trailerLink,
+      id,
       nameRU,
       nameEN,
     })
