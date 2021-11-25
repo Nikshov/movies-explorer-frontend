@@ -75,7 +75,7 @@ function App() {
   }
 
   async function handleSearchMovie(userRequest) {
-    console.log(userRequest, location, 'ДАСУКА');
+    console.log(userRequest, location, 'handleSearchMovieSTART');
     setIsLoading(true);
 
     const moviesList = getList(location);
@@ -83,9 +83,8 @@ function App() {
       setSearchResult([]);
       setIsLoading(false);
 
-      return console.log('ОШИБКА НУЛЛЛЬ', searchResult, searchResult.length);
+      return console.log('список пуст', searchResult, searchResult.length);
     }
-    console.log(moviesList, 'ЧООООООООООООООО');
     const result = await filter(moviesList, userRequest);
     console.log(result);
     setSearchResult(result);
