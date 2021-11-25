@@ -24,7 +24,7 @@ import { getMoviesList } from '../../utils/MoviesApi';
 import UserContext from '../../contexts/UserContext';
 import { Auth } from '../../utils/Auth';
 
-function App() {  
+function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState(React.useContext(UserContext));
   const [isShort, setIsShort] = React.useState(false);
@@ -38,8 +38,6 @@ function App() {
   const location = window.location.pathname;
   const navigate = useNavigate();
 
-  
-  
   React.useEffect(() => {
     if (!loggedIn)
       checkAuth()
@@ -53,8 +51,6 @@ function App() {
   React.useEffect(() => {
     console.log(isShort);
   }, [isShort]);
-
-
 
   async function initMoviesLists() {
     await getMoviesList()
@@ -77,7 +73,7 @@ function App() {
       });
     setFavList(JSON.parse(localStorage.getItem('favMovieList')));
     setFavShortList(favList.filter((movie) => movie.duration <= 40));
-  };
+  }
 
   async function handleSearchMovie(userRequest) {
     console.log(userRequest, location, 'ДАСУКА');
@@ -87,7 +83,7 @@ function App() {
     if (moviesList.length === 0) {
       setSearchResult([]);
       setIsLoading(false);
-      
+
       return console.log('ОШИБКА НУЛЛЛЬ', searchResult, searchResult.length);
     }
     console.log(moviesList, 'ЧООООООООООООООО');
@@ -100,30 +96,30 @@ function App() {
   function getList(location) {
     if (location === '/movies') {
       getMoviesList()
-      .then((movies) => {
-        localStorage.setItem('fullMovieList', JSON.stringify(movies));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        .then((movies) => {
+          localStorage.setItem('fullMovieList', JSON.stringify(movies));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
 
-    setFullList(JSON.parse(localStorage.getItem('fullMovieList')));
+      setFullList(JSON.parse(localStorage.getItem('fullMovieList')));
       setShortList(fullList.filter((movie) => movie.duration <= 40));
-      
+
       const list = isShort ? shortList : fullList;
       console.log('nosav', list);
       return list;
     }
     if (location === '/saved-movies') {
       getMovies()
-      .then((favMovies) => {
-        localStorage.setItem('favMovieList', JSON.stringify(favMovies));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    setFavList(JSON.parse(localStorage.getItem('favMovieList')));
-    setFavShortList(favList.filter((movie) => movie.duration <= 40));
+        .then((favMovies) => {
+          localStorage.setItem('favMovieList', JSON.stringify(favMovies));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      setFavList(JSON.parse(localStorage.getItem('favMovieList')));
+      setFavShortList(favList.filter((movie) => movie.duration <= 40));
 
       const list = isShort ? favShortList : favList;
       console.log('sav', list);
@@ -190,7 +186,9 @@ function App() {
   }
 
   function removeFav(card) {
-    removeMovie(card);
+    removeMovie(card._id).then((suc) => console.log('DELETED!') ).catch((error) => {
+      console.log(error);
+    });
   }
 
   function toggle() {
@@ -243,9 +241,9 @@ function App() {
                 isLoading={isLoading}
                 searchMovie={handleSearchMovie}
                 toggle={toggle}
-                cards={ searchResult }
-                onCardDelete={ removeFav }
-                onCardLike={ addFav}
+                cards={searchResult}
+                onCardDelete={removeFav}
+                onCardLike={addFav}
               />
             </Auth>
           }></Route>
@@ -266,9 +264,9 @@ function App() {
                 isLoading={isLoading}
                 searchMovie={handleSearchMovie}
                 toggle={toggle}
-                cards={ searchResult }
-                onCardDelete={ removeFav }
-                onCardLike={ addFav}
+                cards={searchResult}
+                onCardDelete={removeFav}
+                onCardLike={addFav}
               />
             </Auth>
           }></Route>
