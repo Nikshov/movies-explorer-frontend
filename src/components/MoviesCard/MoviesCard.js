@@ -7,10 +7,12 @@ function MoviesCard({ isSaved, card, onCardLike, onCardDel }) {
 
 
   function handleLikeClick() {
-    onCardLike(card);
+    console.log(card, "SUUUUUUC");
+    /* onCardLike(card); */
   }
 
   function handleDelClick() {
+    console.log(card);
     onCardDel(card);
   }
 

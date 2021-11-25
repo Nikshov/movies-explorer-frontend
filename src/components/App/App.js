@@ -99,11 +99,32 @@ function App() {
 
   function getList(location) {
     if (location === '/movies') {
+      getMoviesList()
+      .then((movies) => {
+        localStorage.setItem('fullMovieList', JSON.stringify(movies));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    setFullList(JSON.parse(localStorage.getItem('fullMovieList')));
+      setShortList(fullList.filter((movie) => movie.duration <= 40));
+      
       const list = isShort ? shortList : fullList;
       console.log('nosav', list);
       return list;
     }
     if (location === '/saved-movies') {
+      getMovies()
+      .then((favMovies) => {
+        localStorage.setItem('favMovieList', JSON.stringify(favMovies));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setFavList(JSON.parse(localStorage.getItem('favMovieList')));
+    setFavShortList(favList.filter((movie) => movie.duration <= 40));
+
       const list = isShort ? favShortList : favList;
       console.log('sav', list);
       return list;
@@ -169,7 +190,7 @@ function App() {
   }
 
   function removeFav(card) {
-    console.log(card);
+    removeMovie(id)ж
   }
 
   function toggle() {
@@ -245,7 +266,9 @@ function App() {
                 isLoading={isLoading}
                 searchMovie={handleSearchMovie}
                 toggle={toggle}
-                cards={searchResult}
+                cards={ searchResult }
+                onCardDelete={ removeFav }
+                onCardLike={ addFav}
               />
             </Auth>
           }></Route>
