@@ -19,6 +19,7 @@ function Profile({ handleUpdateUser, onSignOut, }) {
   }
 
   function handleSubmit() {
+    console.log(email, name);
     handleUpdateUser(email, name);
   }
 
