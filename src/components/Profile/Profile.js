@@ -62,14 +62,14 @@ function Profile({ handleUpdateUser, onSignOut, setUpdMessage, setUpdErr, setIsD
             <input
               className='profile__input'
               onChange={handleChange}
-              value={name || ''}
+              value={name || currentUser.name}
               placeholder='Имя'
               type='text'
               name='name-user'
               minLength='1'
               maxLength='100'
               required
-              disabled={isDisabledForm}
+              /* disabled={isDisabledForm} */
             />
           </fieldset>
           <fieldset className='profile__input-container'>
@@ -86,7 +86,7 @@ function Profile({ handleUpdateUser, onSignOut, setUpdMessage, setUpdErr, setIsD
               minLength='1'
               maxLength='100'
               required
-              disabled={isDisabledForm}
+              /* disabled={isDisabledForm} */
             />
           </fieldset>
           <span className={`${updErr ? 'profile__error-msg' : 'profile__upd-msg'}`}>
