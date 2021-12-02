@@ -17,11 +17,6 @@ function Profile({ handleUpdateUser, onSignOut, setUpdMessage, setUpdErr, setIsD
     console.log(name, email)
   }, [email, name, setIsDisabledForm]);
 
-  React.useEffect(() => {
-    if (currentUser) {
-      resetForm();
-    }
-  }, [currentUser, resetForm]);
 
   function handleSubmit(evt) {
     evt.preventDefault();
