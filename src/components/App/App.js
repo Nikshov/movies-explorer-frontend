@@ -142,11 +142,7 @@ function App() {
     setIsLoading(true);
     const full = JSON.parse(localStorage.getItem('fullMovieList'));
     const short = full.filter((movie) => movie.duration <= 40);
-    setFullList(full);
-    setShortList(fullList.filter((movie) => movie.duration <= 40));
-    console.log('wtf:', full, 'wtf2:', short, 'WUT:', JSON.parse(localStorage.getItem('fullMovieList')))
     const moviesList = isShort ? short : full;
-    console.log('movieslist:', moviesList, isShort)
     if (moviesList.length === 0) {
       setSearchResult([]);
       setIsLoading(false);
@@ -158,6 +154,9 @@ function App() {
     setSearchResult(result);
     setIsLoading(false);
     setNotFoundMovies(false);
+    if (result.length === 0) {
+      setNotFoundMovies(true);
+    }
   }
 
   async function handleSearchSavedMovie(userRequest) {
