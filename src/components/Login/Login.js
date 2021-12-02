@@ -2,22 +2,25 @@ import './Login.css';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '../Logo/Logo';
+import { useValidation } from '../../utils/useValidation';
 
-function Login({ signin }) {
-  const [password, setPassword] = React.useState('');
-  const [email, setEmail] = React.useState('');
+function Login({ signin, isDisabledForm, setAuthErr, authErr }) {
+  const { values, handleChange, isValid, resetForm } = useValidation();
+  const { email, password } = values;
 
-  function handleEmailChange(evt) {
-    setEmail(evt.target.value);
-  }
-
-  function handlePasswordChange(evt) {
-    setPassword(evt.target.value);
-  }
+  React.useEffect(() => {
+    return () => {
+      setAuthErr(false);
+    };
+  }, [setAuthErr]);
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    signin({ password: password , email: email });
+    if (!email || !password) {
+      return;
+    }
+    isValid && signin({ password: password, email: email });
+    resetForm();
   }
 
   return (
@@ -35,8 +38,9 @@ function Login({ signin }) {
           type='email'
           value={email || ''}
           required
-          onChange={handleEmailChange}
-          autoComplete='off'></input>
+          onChange={handleChange}
+          autoComplete='off'
+          disabled={isDisabledForm}></input>
 
         <span className='login__input-span'>Пароль</span>
         <input
@@ -44,9 +48,11 @@ function Login({ signin }) {
           name='password'
           type='password'
           value={password || ''}
-          onChange={handlePasswordChange}
+          onChange={handleChange}
           required
-          autoComplete='off'></input>
+          autoComplete='off'
+          disabled={isDisabledForm}></input>
+        <span className='login__error-msg'>{authErr ? 'Что-то пошло не так...' : ''}</span>
 
         <button className='login__submit-button' type='submit'>
           Войти

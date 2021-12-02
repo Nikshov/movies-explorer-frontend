@@ -47,6 +47,20 @@
   line-height: 13px;
 }
 
+.profile__error-msg {
+  font-size: 10px;
+  line-height: 12px;
+  color: #ee3465;
+  margin-top: 10px;
+}
+
+.profile__upd-msg {
+  font-size: 10px;
+  line-height: 12px;
+  color: #14eb31;
+  margin-top: 10px;
+}
+
 .profile__edit-button {
   margin-bottom: 16px;
   background-color: #fff;
@@ -56,6 +70,11 @@
   padding: 0;
   border: none;
   cursor: pointer;
+}
+
+.profile__edit-button_inactive {
+  pointer-events: none;
+  user-select: none;
 }
 
 .profile__signout-button {

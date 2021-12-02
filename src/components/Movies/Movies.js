@@ -7,12 +7,12 @@ import Header from '../Header/Header';
 import Preloader from '../Preloader/Preloader';
 import './Movies.css';
 
-export default function Movies({ searchMovie, toggle, cards, isLoading, onCardDelete, onCardLike }) {
+export default function Movies({ searchMovie, toggle, cards, isLoading, onCardDelete, onCardLike, notFound }) {
   return (
     <main className='movies'>
       <Header />
       <SearchForm searchMovie={searchMovie} toggle={toggle} />
-      {isLoading ? <Preloader /> : <MoviesCardList cards={cards} onCardLike={onCardLike}
+      {isLoading ? <Preloader /> : notFound ? <span>Ничего не найдено</span> : <MoviesCardList cards={cards} onCardLike={onCardLike}
             onCardDelete={onCardDelete}/>}
       <Footer />
     </main>

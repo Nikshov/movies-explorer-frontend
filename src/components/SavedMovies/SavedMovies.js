@@ -6,12 +6,12 @@ import Footer from "./../Footer/Footer";
 import Preloader from '../Preloader/Preloader';
 import './SavedMovies.css';
 
-export default function SavedMovies({ searchMovie, toggle, cards, isLoading, onCardDelete, onCardLike }) {
+export default function SavedMovies({ searchMovie, toggle, cards, isLoading, onCardDelete, onCardLike, notFound }) {
   return (
     <section className="saved-movies">
       <Header />
       <SearchForm searchMovie={searchMovie} toggle={toggle} />
-      {isLoading ? <Preloader /> : <MoviesCardList cards={cards} onCardLike={onCardLike}
+      {isLoading ? <Preloader /> : notFound ? <span>Ничего не найдено</span> : <MoviesCardList cards={cards} onCardLike={onCardLike}
             onCardDelete={onCardDelete}/>}
       <Footer />
     </section>

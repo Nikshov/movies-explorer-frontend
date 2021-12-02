@@ -29,11 +29,19 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [isShort, setIsShort] = React.useState(false);
   const [searchResult, setSearchResult] = React.useState([]);
+  const [searchSavedResult, setSearchSavedResult] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [fullList, setFullList] = React.useState([]);
   const [shortList, setShortList] = React.useState([]);
   const [favList, setFavList] = React.useState([]);
   const [favShortList, setFavShortList] = React.useState([]);
+  const [isDisabledForm, setIsDisabledForm] = React.useState(false);
+  const [authErr, setAuthErr] = React.useState(false);
+  const [updMessage, setUpdMessage] = React.useState(false);
+  const [updErr, setUpdErr] = React.useState(false);
+  const [notFoundMovies, setNotFoundMovies] = React.useState(false);
+  const [notFoundSavedMovies, setNotFoundSavedMovies] = React.useState(false);
+  
 
   const location = window.location.pathname;
   const navigate = useNavigate();
@@ -50,6 +58,7 @@ function App() {
         })
         .catch((err) => console.log(err));
   }, [loggedIn, navigate]);
+  
 
   async function initMoviesLists() {
     await getMoviesList()
@@ -74,7 +83,7 @@ function App() {
     setFavShortList(favList.filter((movie) => movie.duration <= 40));
   }
 
-  async function handleSearchMovie(userRequest) {
+ /*  async function handleSearchMovie(userRequest) {
     console.log(userRequest, location, 'handleSearchMovieSTART');
     setIsLoading(true);
 
@@ -124,6 +133,44 @@ function App() {
       return list;
     }
     return;
+  } */
+
+
+  async function handleSearchMovie(userRequest) {
+    console.log(userRequest, location, 'handleSearchMovieSTART');
+    setIsLoading(true);
+
+    const moviesList = isShort ? shortList : fullList;
+    if (moviesList.length === 0) {
+      setSearchResult([]);
+      setIsLoading(false);
+      setNotFoundMovies(true);
+      return console.log('список пуст', searchResult, searchResult.length);
+    }
+    const result = await filter(moviesList, userRequest);
+    console.log(result);
+    setSearchResult(result);
+    setIsLoading(false);
+    setNotFoundMovies(false);
+}
+  
+
+async function handleSearchSavedMovie(userRequest) {
+    console.log(userRequest, location, 'handleSearchMovieSTART');
+    setIsLoading(true);
+
+    const moviesList = isShort ? favShortList : favList;
+    if (moviesList.length === 0) {
+      setSearchSavedResult([]);
+      setIsLoading(false);
+      setNotFoundSavedMovies(true);
+      return console.log('список пуст', searchResult, searchResult.length);
+    }
+    const result = await filter(moviesList, userRequest);
+    console.log(result);
+    setSearchSavedResult(result);
+  setIsLoading(false);
+  setNotFoundSavedMovies(false);
   }
 
   function filter(moviesList, userRequest) {
@@ -175,6 +222,7 @@ function App() {
           .then((favMovies) => {
             localStorage.setItem('favMovieList', JSON.stringify(favMovies));
             setFavList(JSON.parse(localStorage.getItem('favMovieList')));
+            setFavShortList(favList.filter((movie) => movie.duration <= 40));
           })
           .catch((error) => {
             console.log(error);
@@ -185,7 +233,19 @@ function App() {
 
   function removeFav(card) {
     removeMovie(card._id)
-      .then((suc) => console.log('DELETED!'))
+      .then((suc) => {
+        getMovies()
+          .then((favMovies) => {
+            localStorage.setItem('favMovieList', JSON.stringify(favMovies));
+            setFavList(JSON.parse(localStorage.getItem('favMovieList')));
+            setFavShortList(favList.filter((movie) => movie.duration <= 40));
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        console.log('DELETED!')
+      })
+      
       .catch((error) => {
         console.log(error);
       });
@@ -196,6 +256,7 @@ function App() {
   }
 
   function onSignIn({ email, password }) {
+    setIsDisabledForm(true);
     signin({ email, password })
       .then((user) => {
         console.log(user);
@@ -204,10 +265,15 @@ function App() {
         initMoviesLists();
         navigate('/movies');
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setAuthErr(true);
+        console.log(err);
+      })
+      .finally(() => setIsDisabledForm(false));
   }
 
   function onSignUp({ name, email, password }) {
+    setIsDisabledForm(true);
     signup({ name, email, password })
       .then((answer) => {
         setCurrentUser({ email: email, name: name });
@@ -215,7 +281,11 @@ function App() {
         initMoviesLists();
         navigate('/movies');
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setAuthErr(true);
+        console.log(err);
+      })
+      .finally(() => setIsDisabledForm(false));
   }
 
   function onSignOut() {
@@ -223,17 +293,25 @@ function App() {
       .then(() => {
         setLoggedIn(false);
         setCurrentUser({});
-        navigate('/signin');
+        navigate('/');
       })
       .catch((err) => console.log(err));
   }
 
   function handleUpdateUser(name, email) {
+    setIsDisabledForm(true);
     updateUser(name, email)
       .then((res) => {
-        setCurrentUser(res);
+        setUpdMessage(res.message);
+        getUser().then((user) => {
+          setCurrentUser({ email: user.email, name: user.name }).catch((err) => console.log(err));
+        });
       })
-      .catch((err) => console.log('ERORR', err));
+      .catch((err) => {
+        setUpdErr(err);
+        console.log('ERORR:', err);
+      })
+      .finally(() => setIsDisabledForm(false));
   }
 
   return (
@@ -244,14 +322,15 @@ function App() {
           exact
           path='/movies'
           element={
-            <Auth redirectTo='/signin' loggedIn={loggedIn}>
+            <Auth redirectTo='/' loggedIn={loggedIn}>
               <Movies
                 isLoading={isLoading}
                 searchMovie={handleSearchMovie}
                 toggle={toggle}
                 cards={searchResult}
                 onCardDelete={removeFav}
-                onCardLike={addFav}
+                onCardLike={ addFav }
+                notFound={notFoundMovies}
               />
             </Auth>
           }></Route>
@@ -259,27 +338,55 @@ function App() {
           exact
           path='/profile'
           element={
-            <Auth redirectTo='/signin' loggedIn={loggedIn}>
-              <Profile handleUpdateUser={handleUpdateUser} onSignOut={onSignOut} />
+            <Auth redirectTo='/' loggedIn={loggedIn}>
+              <Profile
+                handleUpdateUser={handleUpdateUser}
+                onSignOut={onSignOut}
+                updMessage={updMessage}
+                updErr={updErr}
+                setUpdErr={setUpdErr}
+                setUpdMessage={setUpdMessage}
+              />
             </Auth>
           }></Route>
         <Route
           exact
           path='/saved-movies'
           element={
-            <Auth redirectTo='/signin' loggedIn={loggedIn}>
+            <Auth redirectTo='/' loggedIn={loggedIn}>
               <SavedMovies
                 isLoading={isLoading}
-                searchMovie={handleSearchMovie}
+                searchMovie={handleSearchSavedMovie}
                 toggle={toggle}
-                cards={searchResult}
+                cards={searchSavedResult}
                 onCardDelete={removeFav}
-                onCardLike={addFav}
+                onCardLike={ addFav }
+                notFound={notFoundSavedMovies}
               />
             </Auth>
           }></Route>
-        <Route exact path='/signup' element={<Register signup={onSignUp} />}></Route>
-        <Route exact path='/signin' element={<Login signin={onSignIn} />}></Route>
+        <Route
+          exact
+          path='/signup'
+          element={
+            <Register
+              signup={onSignUp}
+              isDisabledForm={isDisabledForm}
+              authErr={authErr}
+              setAuthErr={setAuthErr}
+            />
+          }></Route>
+        <Route
+          exact
+          path='/signin'
+          element={
+            <Login
+              signin={onSignIn}
+              isDisabledForm={isDisabledForm}
+              authErr={authErr}
+              setAuthErr={setAuthErr}
+            />
+          }></Route>
         <Route path='*' element={<NotFound />}></Route>
       </Routes>
     </UserContext.Provider>
