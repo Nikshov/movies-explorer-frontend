@@ -14,11 +14,12 @@ function Profile({ handleUpdateUser, onSignOut, setUpdMessage, setUpdErr, setIsD
 
   React.useEffect(() => {
     setIsDisabledForm(false);
-  }, [setIsDisabledForm]);
+    console.log(name, email)
+  }, [email, name, setIsDisabledForm]);
 
   React.useEffect(() => {
     if (currentUser) {
-      resetForm(currentUser, {}, true);
+      resetForm();
     }
   }, [currentUser, resetForm]);
 
@@ -69,6 +70,7 @@ function Profile({ handleUpdateUser, onSignOut, setUpdMessage, setUpdErr, setIsD
               minLength='1'
               maxLength='100'
               required
+              autoComplete='off'
               /* disabled={isDisabledForm} */
             />
           </fieldset>
@@ -86,6 +88,7 @@ function Profile({ handleUpdateUser, onSignOut, setUpdMessage, setUpdErr, setIsD
               minLength='1'
               maxLength='100'
               required
+              autoComplete='off'
               /* disabled={isDisabledForm} */
             />
           </fieldset>
