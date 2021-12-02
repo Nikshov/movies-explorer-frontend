@@ -16,6 +16,8 @@ function MoviesCard({ isSaved, card, onCardLike, onCardDel }) {
     onCardDel(card);
   }
 
+  const source = card.image.url ? `https://api.nomoreparties.co${card.image.url}` : card.image;
+
   return (
     <div className='card'>
       <div className='card__head-container'>
@@ -30,7 +32,7 @@ function MoviesCard({ isSaved, card, onCardLike, onCardDel }) {
         )}
       
         </div>
-        <img className='card__img' src={`https://api.nomoreparties.co${card.image.url}`} alt='обложка фильма' />
+        <img className='card__img' src={source} alt='обложка фильма' />
       
     </div>
   );

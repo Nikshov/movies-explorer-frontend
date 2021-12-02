@@ -24,8 +24,8 @@ function identifyError(status) {
   }
 };
 
-export async function signup({name, email, password}) {
-  const res = await fetch(`${mainApiBaseUrl}/signup`, {
+export function signup({name, email, password}) {
+  return fetch(`${mainApiBaseUrl}/signup`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -33,12 +33,11 @@ export async function signup({name, email, password}) {
     },
     body: JSON.stringify({ email: email, password: password, name: name }),
     credentials: 'include',
-  });
-  return checkResponse(res);
+  }).then(res => checkResponse(res));
 };
 
-export async function signin({email, password}) {
-  const res = await fetch(`${mainApiBaseUrl}/signin`, {
+export function signin({email, password}) {
+  return fetch(`${mainApiBaseUrl}/signin`, {
     method: 'POST',
     credentials: 'include',
     headers: {
@@ -46,32 +45,29 @@ export async function signin({email, password}) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ email: email, password: password }),
-  });
-  return checkResponse(res);
+  }).then(res => checkResponse(res));
 };
 
-export async function signout() {
-  const res = await fetch(`${mainApiBaseUrl}/signout`, {
+export function signout() {
+  return fetch(`${mainApiBaseUrl}/signout`, {
     method: 'POST',
     credentials: 'include',
-  });
-  return checkResponse(res);
+  }).then(res => checkResponse(res));
 }
 
-export async function getUser() {
-  const res = await fetch(`${mainApiBaseUrl}/users/me`, {
+export function getUser() {
+  return fetch(`${mainApiBaseUrl}/users/me`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
     credentials: 'include',
-  });
-  return checkResponse(res);
+  }).then(res => checkResponse(res));
 };
 
-export async function updateUser(email, name) {
-  const res = await fetch(`${mainApiBaseUrl}/users/me`, {
+export function updateUser(email, name) {
+  return fetch(`${mainApiBaseUrl}/users/me`, {
     method: 'PATCH',
     headers: {
       'Accept': 'application/json',
@@ -82,23 +78,21 @@ export async function updateUser(email, name) {
       name: name,
     }),
     credentials: 'include',
-  });
-  return checkResponse(res);
+  }).then(res => checkResponse(res));
 };
 
-export async function getMovies() {
-  const res = await fetch(`${mainApiBaseUrl}/movies`, {
+export function getMovies() {
+  return fetch(`${mainApiBaseUrl}/movies`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
     credentials: 'include',
-  });
-  return checkResponse(res);
+  }).then(res => checkResponse(res));
 };
 
-export async function addMovie({
+export function addMovie({
   country,
   director,
   duration,
@@ -109,7 +103,7 @@ export async function addMovie({
   id,
   nameRU, nameEN
 }) {
-  const res = await fetch(`${mainApiBaseUrl}/movies`, {
+  return fetch(`${mainApiBaseUrl}/movies`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -121,34 +115,31 @@ export async function addMovie({
       duration: duration,
       year: year,
       description: description,
-      image: image.url,
+      image: `https://api.nomoreparties.co${image.url}`,
       trailer: trailerLink,
-      thumbnail: image.formats.thumbnail.url,
+      thumbnail: `https://api.nomoreparties.co${image.formats.thumbnail.url}`,
       movieId: id,
       nameRU: nameRU,
       nameEN: nameEN,
     }),
     credentials: 'include',
-  });
-  return checkResponse(res);
+  }).then(res => checkResponse(res));
 };
 
-export async function removeMovie(id) {
-  const res = await fetch(`${mainApiBaseUrl}/movies/${id}`, {
+export function removeMovie(id) {
+  return fetch(`${mainApiBaseUrl}/movies/${id}`, {
     method: 'DELETE',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
     credentials: 'include',
-  });
-  return checkResponse(res);
+  }).then(res => checkResponse(res));
 };
 
-export async function checkAuth() {
-  const res = await fetch(`${mainApiBaseUrl}/users/me`, {
+export function checkAuth() {
+  return fetch(`${mainApiBaseUrl}/users/me`, {
     method: 'POST',
     credentials: 'include',
-  });
-  return checkResponse(res);
+  }).then(res => checkResponse(res));
 }
