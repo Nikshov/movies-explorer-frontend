@@ -6,16 +6,30 @@ import Footer from './../Footer/Footer';
 import Header from '../Header/Header';
 import Preloader from '../Preloader/Preloader';
 import './Movies.css';
-import  AppContext  from '../../contexts/AppContext';
+import AppContext from '../../contexts/AppContext';
 
-export default function Movies({ searchMovie, toggle, onCardDelete, onCardLike, }) {
+export default function Movies({
+  searchMovie,
+  toggle,
+  onCardDelete,
+  onCardLike,
+  setIsDisabledForm,
+}) {
   const { searchResult, isLoading, notFoundMovies } = React.useContext(AppContext);
+  React.useEffect(() => {
+    setIsDisabledForm(false);
+  }, [setIsDisabledForm]);
   return (
     <main className='movies'>
       <Header />
       <SearchForm searchMovie={searchMovie} toggle={toggle} />
-      {isLoading ? <Preloader /> : notFoundMovies ? <span>Ничего не найдено</span> : <MoviesCardList cards={searchResult} onCardLike={onCardLike}
-            onCardDelete={onCardDelete}/>}
+      {isLoading ? (
+        <Preloader />
+      ) : notFoundMovies ? (
+        <span>Ничего не найдено</span>
+      ) : (
+        <MoviesCardList cards={searchResult} onCardLike={onCardLike} onCardDelete={onCardDelete} />
+      )}
       <Footer />
     </main>
   );

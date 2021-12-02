@@ -3,14 +3,19 @@ import './Profile.css';
 import Header from '../Header/Header';
 import UserContext from '../../contexts/UserContext';
 import { useValidation } from '../../utils/useValidation';
-import  AppContext  from '../../contexts/AppContext';
+import AppContext from '../../contexts/AppContext';
 
-function Profile({ handleUpdateUser, onSignOut, setUpdMessage, setUpdErr }) {
+function Profile({ handleUpdateUser, onSignOut, setUpdMessage, setUpdErr, setIsDisabledForm }) {
   const { values, handleChange, isValid, setValues, resetForm } = useValidation();
   const { name, email } = values;
   const [isButtonActive, setIsButtonActive] = React.useState(true);
   const currentUser = React.useContext(UserContext);
   const { updErr, isDisabledForm, updMessage } = React.useContext(AppContext);
+
+  React.useEffect(() => {
+    setIsDisabledForm(false);
+  }, [setIsDisabledForm]);
+
   React.useEffect(() => {
     if (currentUser) {
       resetForm(currentUser, {}, true);

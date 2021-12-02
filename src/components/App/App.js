@@ -51,9 +51,11 @@ function App() {
         .then(() => {
           setLoggedIn(true);
           navigate('/movies');
-          getUser().then((user) => {
-            setCurrentUser({ email: user.email, name: user.name }).catch((err) => console.log(err));
-          });
+          getUser()
+            .then((user) => {
+              setCurrentUser({ email: user.email, name: user.name });
+            })
+            .catch((err) => console.log(err));
         })
         .catch((err) => console.log(err));
   }, [loggedIn, navigate]);
@@ -356,6 +358,7 @@ function App() {
                   updErr={updErr}
                   setUpdErr={setUpdErr}
                   setUpdMessage={setUpdMessage}
+                  setIsDisabledForm={setIsDisabledForm}
                 />
               </Auth>
             }></Route>
@@ -384,6 +387,7 @@ function App() {
                 isDisabledForm={isDisabledForm}
                 authErr={authErr}
                 setAuthErr={setAuthErr}
+                setIsDisabledForm={setIsDisabledForm}
               />
             }></Route>
           <Route
@@ -395,6 +399,7 @@ function App() {
                 isDisabledForm={isDisabledForm}
                 authErr={authErr}
                 setAuthErr={setAuthErr}
+                setIsDisabledForm={setIsDisabledForm}
               />
             }></Route>
           <Route path='*' element={<NotFound />}></Route>
