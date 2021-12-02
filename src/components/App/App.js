@@ -140,9 +140,9 @@ function App() {
   async function handleSearchMovie(userRequest) {
     console.log(userRequest, location, 'handleSearchMovieSTART');
     setIsLoading(true);
-    setFullList(JSON.parse(localStorage.getItem('fullMovieList')));
+    setFullList([JSON.parse(localStorage.getItem('fullMovieList'))]);
     setShortList(fullList.filter((movie) => movie.duration <= 40));
-    console.log('wtf:', fullList, 'WUT:', JSON.parse(localStorage.getItem('fullMovieList')))
+    console.log('wtf:', fullList, 'wtf2:', shortList, 'WUT:', JSON.parse(localStorage.getItem('fullMovieList')))
     const moviesList = isShort ? shortList : fullList;
     if (moviesList.length === 0) {
       setSearchResult([]);
