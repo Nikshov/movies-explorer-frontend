@@ -6,7 +6,7 @@ import Footer from './../Footer/Footer';
 import Header from '../Header/Header';
 import Preloader from '../Preloader/Preloader';
 import './Movies.css';
-import { AppContext } from '../../context/AppContext';
+import  AppContext  from '../../contexts/AppContext';
 
 export default function Movies({ searchMovie, toggle, onCardDelete, onCardLike, }) {
   const { searchResult, isLoading, notFoundMovies } = React.useContext(AppContext);

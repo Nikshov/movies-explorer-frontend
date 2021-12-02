@@ -5,7 +5,7 @@ import Header from '../Header/Header';
 import Footer from "./../Footer/Footer";
 import Preloader from '../Preloader/Preloader';
 import './SavedMovies.css';
-import { AppContext } from '../../context/AppContext';
+import  AppContext from '../../contexts/AppContext';
 
 export default function SavedMovies({ searchMovie, toggle, onCardDelete, onCardLike, }) {
   const { searchSavedResult, isLoading, notFoundSavedMovies } = React.useContext(AppContext);

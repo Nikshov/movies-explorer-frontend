@@ -3,7 +3,7 @@ import './Profile.css';
 import Header from '../Header/Header';
 import UserContext from '../../contexts/UserContext';
 import { useValidation } from '../../utils/useValidation';
-import { AppContext } from '../../context/AppContext';
+import  AppContext  from '../../contexts/AppContext';
 
 function Profile({ handleUpdateUser, onSignOut, setUpdMessage, setUpdErr }) {
   const { values, handleChange, isValid, setValues, resetForm } = useValidation();
