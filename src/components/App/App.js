@@ -146,6 +146,7 @@ function App() {
     setShortList(fullList.filter((movie) => movie.duration <= 40));
     console.log('wtf:', full, 'wtf2:', short, 'WUT:', JSON.parse(localStorage.getItem('fullMovieList')))
     const moviesList = isShort ? short : full;
+    console.log('movieslist:', moviesList, isShort)
     if (moviesList.length === 0) {
       setSearchResult([]);
       setIsLoading(false);
