@@ -60,14 +60,6 @@ function App() {
         .catch((err) => console.log(err));
   }, [loggedIn, navigate]);
 
-React.useEffect(() => {
-  if (loggedIn) {
-      setFullList(JSON.parse(localStorage.getItem('fullMovieList')));
-    setShortList(fullList.filter((movie) => movie.duration <= 40));
-    console.log(fullList, '?space?', shortList)
-    }
-      
-  }, [fullList, loggedIn, shortList]);
 
   async function initMoviesLists() {
     await getMoviesList()
