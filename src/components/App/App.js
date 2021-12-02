@@ -60,9 +60,19 @@ function App() {
         .catch((err) => console.log(err));
   }, [loggedIn, navigate]);
 
+React.useEffect(() => {
+  if (loggedIn) {
+      setFullList(JSON.parse(localStorage.getItem('fullMovieList')));
+    setShortList(fullList.filter((movie) => movie.duration <= 40));
+    console.log(fullList, '?space?', shortList)
+    }
+      
+  }, [fullList, loggedIn, shortList]);
+
   async function initMoviesLists() {
     await getMoviesList()
       .then((movies) => {
+        console.log('wtfINIT:', movies);
         localStorage.setItem('fullMovieList', JSON.stringify(movies));
       })
       .catch((error) => {
@@ -140,6 +150,7 @@ function App() {
     setIsLoading(true);
     setFullList(JSON.parse(localStorage.getItem('fullMovieList')));
     setShortList(fullList.filter((movie) => movie.duration <= 40));
+    console.log('wtf:', fullList, 'WUT:', JSON.parse(localStorage.getItem('fullMovieList')))
     const moviesList = isShort ? shortList : fullList;
     if (moviesList.length === 0) {
       setSearchResult([]);
