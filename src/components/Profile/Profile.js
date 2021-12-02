@@ -21,9 +21,8 @@ function Profile({ handleUpdateUser, onSignOut, setUpdMessage, setUpdErr, setIsD
   function handleSubmit(evt) {
     evt.preventDefault();
     isValid &&
-      handleUpdateUser(name, email).then(() => {
-        setValues({});
-      });
+      handleUpdateUser(name, email);
+    resetForm();
   }
 
   React.useEffect(() => {
