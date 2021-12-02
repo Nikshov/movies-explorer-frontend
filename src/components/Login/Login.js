@@ -3,16 +3,19 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '../Logo/Logo';
 import { useValidation } from '../../utils/useValidation';
+import AppContext from '../../contexts/AppContext';
 
-function Login({ signin, isDisabledForm, setAuthErr, authErr }) {
+function Login({ signin, setAuthErr, setIsDisabledForm }) {
   const { values, handleChange, isValid, resetForm } = useValidation();
   const { email, password } = values;
+  const { isDisabledForm, authErr } = React.useContext(AppContext);
 
   React.useEffect(() => {
     return () => {
       setAuthErr(false);
+      setIsDisabledForm(false);
     };
-  }, [setAuthErr]);
+  }, [setAuthErr, setIsDisabledForm]);
 
   function handleSubmit(evt) {
     evt.preventDefault();

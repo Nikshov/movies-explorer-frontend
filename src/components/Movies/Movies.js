@@ -13,12 +13,8 @@ export default function Movies({
   toggle,
   onCardDelete,
   onCardLike,
-  setIsDisabledForm,
 }) {
   const { searchResult, isLoading, notFoundMovies } = React.useContext(AppContext);
-  React.useEffect(() => {
-    setIsDisabledForm(false);
-  }, [setIsDisabledForm]);
   return (
     <main className='movies'>
       <Header />

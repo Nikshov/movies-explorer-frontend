@@ -12,12 +12,8 @@ export default function SavedMovies({
   toggle,
   onCardDelete,
   onCardLike,
-  setIsDisabledForm,
 }) {
   const { searchSavedResult, isLoading, notFoundSavedMovies } = React.useContext(AppContext);
-  React.useEffect(() => {
-    setIsDisabledForm(false);
-  }, [setIsDisabledForm]);
   return (
     <section className='saved-movies'>
       <Header />
