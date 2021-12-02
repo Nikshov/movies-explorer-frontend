@@ -60,7 +60,6 @@ function App() {
         .catch((err) => console.log(err));
   }, [loggedIn, navigate]);
 
-
   async function initMoviesLists() {
     await getMoviesList()
       .then((movies) => {
@@ -162,8 +161,9 @@ function App() {
   async function handleSearchSavedMovie(userRequest) {
     console.log(userRequest, location, 'handleSearchMovieSTART');
     setIsLoading(true);
-
-    const moviesList = isShort ? favShortList : favList;
+    const full = JSON.parse(localStorage.getItem('favMovieList'));
+    const short = full.filter((movie) => movie.duration <= 40);
+    const moviesList = isShort ? short : full;
     if (moviesList.length === 0) {
       setSearchSavedResult([]);
       setIsLoading(false);
@@ -175,6 +175,9 @@ function App() {
     setSearchSavedResult(result);
     setIsLoading(false);
     setNotFoundSavedMovies(false);
+    if (result.length === 0) {
+      setNotFoundMovies(true);
+    }
   }
 
   function filter(moviesList, userRequest) {
