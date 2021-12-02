@@ -62,7 +62,7 @@ function Profile({ handleUpdateUser, onSignOut, setUpdMessage, setUpdErr, setIsD
             <input
               className='profile__input'
               onChange={handleChange}
-              value={name || currentUser.name}
+              value={name || ''}
               placeholder='Имя'
               type='text'
               name='name-user'
