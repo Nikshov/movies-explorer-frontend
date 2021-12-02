@@ -5,13 +5,15 @@ import Header from '../Header/Header';
 import Footer from "./../Footer/Footer";
 import Preloader from '../Preloader/Preloader';
 import './SavedMovies.css';
+import { AppContext } from '../../context/AppContext';
 
-export default function SavedMovies({ searchMovie, toggle, cards, isLoading, onCardDelete, onCardLike, notFound }) {
+export default function SavedMovies({ searchMovie, toggle, onCardDelete, onCardLike, }) {
+  const { searchSavedResult, isLoading, notFoundSavedMovies } = React.useContext(AppContext);
   return (
     <section className="saved-movies">
       <Header />
       <SearchForm searchMovie={searchMovie} toggle={toggle} />
-      {isLoading ? <Preloader /> : notFound ? <span>Ничего не найдено</span> : <MoviesCardList cards={cards} onCardLike={onCardLike}
+      {isLoading ? <Preloader /> : notFoundSavedMovies ? <span>Ничего не найдено</span> : <MoviesCardList cards={searchSavedResult} onCardLike={onCardLike}
             onCardDelete={onCardDelete}/>}
       <Footer />
     </section>

@@ -1,23 +1,16 @@
 import React from 'react';
 import './Profile.css';
 import Header from '../Header/Header';
-import CurrentUserContext from '../../contexts/UserContext';
+import UserContext from '../../contexts/UserContext';
 import { useValidation } from '../../utils/useValidation';
+import { AppContext } from '../../context/AppContext';
 
-function Profile({
-  handleUpdateUser,
-  onSignOut,
-  setUpdMessage,
-  setUpdErr,
-  isDisabledForm,
-  updErr,
-  updMessage,
-}) {
+function Profile({ handleUpdateUser, onSignOut, setUpdMessage, setUpdErr }) {
   const { values, handleChange, isValid, setValues, resetForm } = useValidation();
   const { name, email } = values;
   const [isButtonActive, setIsButtonActive] = React.useState(true);
-  const currentUser = React.useContext(CurrentUserContext);
-
+  const currentUser = React.useContext(UserContext);
+  const { updErr, isDisabledForm, updMessage } = React.useContext(AppContext);
   React.useEffect(() => {
     if (currentUser) {
       resetForm(currentUser, {}, true);
@@ -38,7 +31,7 @@ function Profile({
     } else {
       setIsButtonActive(false);
     }
-  }, [currentUser.email, currentUser.name, email, isValid, name, values]);
+  }, [currentUser.email, currentUser.name, email, isValid, name]);
 
   React.useEffect(() => {
     return () => {
@@ -90,10 +83,10 @@ function Profile({
               required
               disabled={isDisabledForm}
             />
-            <span className={`${updErr ? 'profile__error-msg' : 'profile__upd-msg'}`}>
-              {updMessage ? `${updMessage}` : `Что пошло не так... `}
-            </span>
           </fieldset>
+          <span className={`${updErr ? 'profile__error-msg' : 'profile__upd-msg'}`}>
+            {updMessage ? `${updMessage}` : `Что пошло не так... `}
+          </span>
         </form>
         <button
           onClick={handleSubmit}

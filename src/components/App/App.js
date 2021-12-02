@@ -1,7 +1,6 @@
 import './App.css';
 import React from 'react';
-import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
-
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
@@ -22,6 +21,7 @@ import {
 } from '../../utils/MainApi';
 import { getMoviesList } from '../../utils/MoviesApi';
 import UserContext from '../../contexts/UserContext';
+import AppContext from '../../contexts/AppContext';
 import { Auth } from '../../utils/Auth';
 
 function App() {
@@ -41,7 +41,6 @@ function App() {
   const [updErr, setUpdErr] = React.useState(false);
   const [notFoundMovies, setNotFoundMovies] = React.useState(false);
   const [notFoundSavedMovies, setNotFoundSavedMovies] = React.useState(false);
-  
 
   const location = window.location.pathname;
   const navigate = useNavigate();
@@ -58,7 +57,6 @@ function App() {
         })
         .catch((err) => console.log(err));
   }, [loggedIn, navigate]);
-  
 
   async function initMoviesLists() {
     await getMoviesList()
@@ -83,7 +81,7 @@ function App() {
     setFavShortList(favList.filter((movie) => movie.duration <= 40));
   }
 
- /*  async function handleSearchMovie(userRequest) {
+  /*  async function handleSearchMovie(userRequest) {
     console.log(userRequest, location, 'handleSearchMovieSTART');
     setIsLoading(true);
 
@@ -135,7 +133,6 @@ function App() {
     return;
   } */
 
-
   async function handleSearchMovie(userRequest) {
     console.log(userRequest, location, 'handleSearchMovieSTART');
     setIsLoading(true);
@@ -152,10 +149,9 @@ function App() {
     setSearchResult(result);
     setIsLoading(false);
     setNotFoundMovies(false);
-}
-  
+  }
 
-async function handleSearchSavedMovie(userRequest) {
+  async function handleSearchSavedMovie(userRequest) {
     console.log(userRequest, location, 'handleSearchMovieSTART');
     setIsLoading(true);
 
@@ -169,8 +165,8 @@ async function handleSearchSavedMovie(userRequest) {
     const result = await filter(moviesList, userRequest);
     console.log(result);
     setSearchSavedResult(result);
-  setIsLoading(false);
-  setNotFoundSavedMovies(false);
+    setIsLoading(false);
+    setNotFoundSavedMovies(false);
   }
 
   function filter(moviesList, userRequest) {
@@ -243,9 +239,9 @@ async function handleSearchSavedMovie(userRequest) {
           .catch((error) => {
             console.log(error);
           });
-        console.log('DELETED!')
+        console.log('DELETED!');
       })
-      
+
       .catch((error) => {
         console.log(error);
       });
@@ -316,79 +312,94 @@ async function handleSearchSavedMovie(userRequest) {
 
   return (
     <UserContext.Provider value={currentUser}>
-      <Routes>
-        <Route exact path='/' element={<Main />}></Route>
-        <Route
-          exact
-          path='/movies'
-          element={
-            <Auth redirectTo='/' loggedIn={loggedIn}>
-              <Movies
-                isLoading={isLoading}
-                searchMovie={handleSearchMovie}
-                toggle={toggle}
-                cards={searchResult}
-                onCardDelete={removeFav}
-                onCardLike={ addFav }
-                notFound={notFoundMovies}
+      <AppContext.Provider
+        value={{
+          loggedIn: loggedIn,
+          isShort: isShort,
+          searchResult: searchResult,
+          searchSavedResult: searchSavedResult,
+          isLoading: isLoading,
+          isDisabledForm: isDisabledForm,
+          authErr: authErr,
+          updMessage: updMessage,
+          updErr: updErr,
+          notFoundMovies: notFoundMovies,
+          notFoundSavedMovies: notFoundSavedMovies,
+        }}>
+        <Routes>
+          <Route exact path='/' element={<Main />}></Route>
+          <Route
+            exact
+            path='/movies'
+            element={
+              <Auth redirectTo='/' loggedIn={loggedIn}>
+                <Movies
+                  isLoading={isLoading}
+                  searchMovie={handleSearchMovie}
+                  toggle={toggle}
+                  cards={searchResult}
+                  onCardDelete={removeFav}
+                  onCardLike={addFav}
+                  notFound={notFoundMovies}
+                />
+              </Auth>
+            }></Route>
+          <Route
+            exact
+            path='/profile'
+            element={
+              <Auth redirectTo='/' loggedIn={loggedIn}>
+                <Profile
+                  handleUpdateUser={handleUpdateUser}
+                  onSignOut={onSignOut}
+                  updMessage={updMessage}
+                  updErr={updErr}
+                  setUpdErr={setUpdErr}
+                  setUpdMessage={setUpdMessage}
+                />
+              </Auth>
+            }></Route>
+          <Route
+            exact
+            path='/saved-movies'
+            element={
+              <Auth redirectTo='/' loggedIn={loggedIn}>
+                <SavedMovies
+                  isLoading={isLoading}
+                  searchMovie={handleSearchSavedMovie}
+                  toggle={toggle}
+                  cards={searchSavedResult}
+                  onCardDelete={removeFav}
+                  onCardLike={addFav}
+                  notFound={notFoundSavedMovies}
+                />
+              </Auth>
+            }></Route>
+          <Route
+            exact
+            path='/signup'
+            element={
+              <Register
+                signup={onSignUp}
+                isDisabledForm={isDisabledForm}
+                authErr={authErr}
+                setAuthErr={setAuthErr}
               />
-            </Auth>
-          }></Route>
-        <Route
-          exact
-          path='/profile'
-          element={
-            <Auth redirectTo='/' loggedIn={loggedIn}>
-              <Profile
-                handleUpdateUser={handleUpdateUser}
-                onSignOut={onSignOut}
-                updMessage={updMessage}
-                updErr={updErr}
-                setUpdErr={setUpdErr}
-                setUpdMessage={setUpdMessage}
+            }></Route>
+          <Route
+            exact
+            path='/signin'
+            element={
+              <Login
+                signin={onSignIn}
+                isDisabledForm={isDisabledForm}
+                authErr={authErr}
+                setAuthErr={setAuthErr}
               />
-            </Auth>
-          }></Route>
-        <Route
-          exact
-          path='/saved-movies'
-          element={
-            <Auth redirectTo='/' loggedIn={loggedIn}>
-              <SavedMovies
-                isLoading={isLoading}
-                searchMovie={handleSearchSavedMovie}
-                toggle={toggle}
-                cards={searchSavedResult}
-                onCardDelete={removeFav}
-                onCardLike={ addFav }
-                notFound={notFoundSavedMovies}
-              />
-            </Auth>
-          }></Route>
-        <Route
-          exact
-          path='/signup'
-          element={
-            <Register
-              signup={onSignUp}
-              isDisabledForm={isDisabledForm}
-              authErr={authErr}
-              setAuthErr={setAuthErr}
-            />
-          }></Route>
-        <Route
-          exact
-          path='/signin'
-          element={
-            <Login
-              signin={onSignIn}
-              isDisabledForm={isDisabledForm}
-              authErr={authErr}
-              setAuthErr={setAuthErr}
-            />
-          }></Route>
-        <Route path='*' element={<NotFound />}></Route>
-      </Routes>
+            }></Route>
+          <Route path='*' element={<NotFound />}></Route>
+        </Routes>
+      </AppContext.Provider>
     </UserContext.Provider>
   );
 }

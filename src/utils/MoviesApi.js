@@ -6,11 +6,12 @@ function checkResponse(res) {
   return Promise.reject(`Ошибка ${res.status}. ${res.body}`);
 }
 
-export function getMoviesList() {
-    return fetch(`https://api.nomoreparties.co/beatfilm-movies`, {
-      method: 'GET',
-      headers: {
-    'Content-Type': 'application/json',
-  },
-    }).then(res => checkResponse(res));
+export async function getMoviesList() {
+    const res = await fetch(`https://api.nomoreparties.co/beatfilm-movies`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  return checkResponse(res);
   }

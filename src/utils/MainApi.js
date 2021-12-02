@@ -24,8 +24,8 @@ function identifyError(status) {
   }
 };
 
-export function signup({name, email, password}) {
-  return fetch(`${mainApiBaseUrl}/signup`, {
+export async function signup({name, email, password}) {
+  const res = await fetch(`${mainApiBaseUrl}/signup`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -33,11 +33,12 @@ export function signup({name, email, password}) {
     },
     body: JSON.stringify({ email: email, password: password, name: name }),
     credentials: 'include',
-  }).then(res => checkResponse(res));
+  });
+  return checkResponse(res);
 };
 
-export function signin({email, password}) {
-  return fetch(`${mainApiBaseUrl}/signin`, {
+export async function signin({email, password}) {
+  const res = await fetch(`${mainApiBaseUrl}/signin`, {
     method: 'POST',
     credentials: 'include',
     headers: {
@@ -45,29 +46,32 @@ export function signin({email, password}) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ email: email, password: password }),
-  }).then(res => checkResponse(res));
+  });
+  return checkResponse(res);
 };
 
-export function signout() {
-  return fetch(`${mainApiBaseUrl}/signout`, {
+export async function signout() {
+  const res = await fetch(`${mainApiBaseUrl}/signout`, {
     method: 'POST',
     credentials: 'include',
-  }).then(res => checkResponse(res));
+  });
+  return checkResponse(res);
 }
 
-export function getUser() {
-  return fetch(`${mainApiBaseUrl}/users/me`, {
+export async function getUser() {
+  const res = await fetch(`${mainApiBaseUrl}/users/me`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
     credentials: 'include',
-  }).then(res => checkResponse(res));
+  });
+  return checkResponse(res);
 };
 
-export function updateUser(email, name) {
-  return fetch(`${mainApiBaseUrl}/users/me`, {
+export async function updateUser(email, name) {
+  const res = await fetch(`${mainApiBaseUrl}/users/me`, {
     method: 'PATCH',
     headers: {
       'Accept': 'application/json',
@@ -78,21 +82,23 @@ export function updateUser(email, name) {
       name: name,
     }),
     credentials: 'include',
-  }).then(res => checkResponse(res));
+  });
+  return checkResponse(res);
 };
 
-export function getMovies() {
-  return fetch(`${mainApiBaseUrl}/movies`, {
+export async function getMovies() {
+  const res = await fetch(`${mainApiBaseUrl}/movies`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
     credentials: 'include',
-  }).then(res => checkResponse(res));
+  });
+  return checkResponse(res);
 };
 
-export function addMovie({
+export async function addMovie({
   country,
   director,
   duration,
@@ -103,7 +109,7 @@ export function addMovie({
   id,
   nameRU, nameEN
 }) {
-  return fetch(`${mainApiBaseUrl}/movies`, {
+  const res = await fetch(`${mainApiBaseUrl}/movies`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -123,23 +129,26 @@ export function addMovie({
       nameEN: nameEN,
     }),
     credentials: 'include',
-  }).then(res => checkResponse(res));
+  });
+  return checkResponse(res);
 };
 
-export function removeMovie(id) {
-  return fetch(`${mainApiBaseUrl}/movies/${id}`, {
+export async function removeMovie(id) {
+  const res = await fetch(`${mainApiBaseUrl}/movies/${id}`, {
     method: 'DELETE',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
     credentials: 'include',
-  }).then(res => checkResponse(res));
+  });
+  return checkResponse(res);
 };
 
-export function checkAuth() {
-  return fetch(`${mainApiBaseUrl}/users/me`, {
+export async function checkAuth() {
+  const res = await fetch(`${mainApiBaseUrl}/users/me`, {
     method: 'POST',
     credentials: 'include',
-  }).then(res => checkResponse(res));
+  });
+  return checkResponse(res);
 }
