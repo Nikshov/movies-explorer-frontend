@@ -14,7 +14,7 @@ export default function Movies({
   onCardDelete,
   onCardLike,
 }) {
-  const { searchResult, isLoading, notFoundMovies } = React.useContext(AppContext);
+  const { filterResult, isLoading, notFoundMovies, favList } = React.useContext(AppContext);
   return (
     <main className='movies'>
       <Header />
@@ -24,7 +24,7 @@ export default function Movies({
       ) : notFoundMovies ? (
         <span>Ничего не найдено</span>
       ) : (
-        <MoviesCardList cards={searchResult} onCardLike={onCardLike} onCardDelete={onCardDelete} />
+        <MoviesCardList cards={filterResult} onCardLike={onCardLike} onCardDelete={onCardDelete} favList={favList} />
       )}
       <Footer />
     </main>

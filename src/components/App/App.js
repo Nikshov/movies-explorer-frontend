@@ -27,23 +27,23 @@ import { Auth } from '../../utils/Auth';
 function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
-  const [isShort, setIsShort] = React.useState(false);
-  const [searchResult, setSearchResult] = React.useState([]);
-  const [searchSavedResult, setSearchSavedResult] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
   const [fullList, setFullList] = React.useState([]);
-  const [shortList, setShortList] = React.useState([]);
   const [favList, setFavList] = React.useState([]);
-  const [favShortList, setFavShortList] = React.useState([]);
+  const [filterResult, setFilterResult] = React.useState([]);
+  const [filterSavedResult, setFilterSavedResult] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+
   const [isDisabledForm, setIsDisabledForm] = React.useState(false);
+
+  const [isShort, setIsShort] = React.useState(false);
   const [authErr, setAuthErr] = React.useState(false);
   const [updMessage, setUpdMessage] = React.useState(false);
   const [updErr, setUpdErr] = React.useState(false);
   const [notFoundMovies, setNotFoundMovies] = React.useState(false);
   const [notFoundSavedMovies, setNotFoundSavedMovies] = React.useState(false);
 
-  const location = window.location.pathname;
   const navigate = useNavigate();
+
 
   React.useEffect(() => {
     if (!loggedIn)
@@ -60,119 +60,66 @@ function App() {
         .catch((err) => console.log(err));
   }, [loggedIn, navigate]);
 
-  async function initMoviesLists() {
-    await getMoviesList()
+  React.useEffect(() => {
+    getMovies()
       .then((movies) => {
-        console.log('wtfINIT:', movies);
-        localStorage.setItem('fullMovieList', JSON.stringify(movies));
+        setFavList(movies);
+        console.log(movies);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
+  }, []);
 
-    setFullList(JSON.parse(localStorage.getItem('fullMovieList')));
-    setShortList(fullList.filter((movie) => movie.duration <= 40));
-
-    await getMovies()
-      .then((favMovies) => {
-        localStorage.setItem('favMovieList', JSON.stringify(favMovies));
+  React.useEffect(() => {
+    getMoviesList()
+      .then((movies) => {
+        setFullList(movies);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
-    setFavList(JSON.parse(localStorage.getItem('favMovieList')));
-    setFavShortList(favList.filter((movie) => movie.duration <= 40));
-  }
+  }, []);
 
-  /*  async function handleSearchMovie(userRequest) {
-    console.log(userRequest, location, 'handleSearchMovieSTART');
-    setIsLoading(true);
+  React.useEffect(() => {
+    localStorage.setItem('fullMovieList', JSON.stringify(fullList));
+  }, [fullList]);
 
-    const moviesList = getList(location);
-    if (moviesList.length === 0) {
-      setSearchResult([]);
-      setIsLoading(false);
+  React.useEffect(() => {
+    localStorage.setItem('favMovieList', JSON.stringify(favList));
+  }, [favList]);
 
-      return console.log('список пуст', searchResult, searchResult.length);
-    }
-    const result = await filter(moviesList, userRequest);
-    console.log(result);
-    setSearchResult(result);
-    setIsLoading(false);
-  }
-
-  function getList(location) {
-    if (location === '/movies') {
-      getMoviesList()
-        .then((movies) => {
-          localStorage.setItem('fullMovieList', JSON.stringify(movies));
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-
-      setFullList(JSON.parse(localStorage.getItem('fullMovieList')));
-      setShortList(fullList.filter((movie) => movie.duration <= 40));
-
-      const list = isShort ? shortList : fullList;
-      console.log('nosav', list);
-      return list;
-    }
-    if (location === '/saved-movies') {
-      getMovies()
-        .then((favMovies) => {
-          localStorage.setItem('favMovieList', JSON.stringify(favMovies));
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      setFavList(JSON.parse(localStorage.getItem('favMovieList')));
-      setFavShortList(favList.filter((movie) => movie.duration <= 40));
-
-      const list = isShort ? favShortList : favList;
-      console.log('sav', list);
-      return list;
-    }
-    return;
-  } */
 
   async function handleSearchMovie(userRequest) {
-    console.log(userRequest, location, 'handleSearchMovieSTART');
     setIsLoading(true);
-    const full = JSON.parse(localStorage.getItem('fullMovieList'));
-    const short = full.filter((movie) => movie.duration <= 40);
-    const moviesList = isShort ? short : full;
-    if (moviesList.length === 0) {
-      setSearchResult([]);
+    const moviesList = JSON.parse(localStorage.getItem('fullMovieList'));
+    if (moviesList?.length === 0) {
+      setFilterResult([]);
       setIsLoading(false);
       setNotFoundMovies(true);
-      return console.log('список пуст', searchResult, searchResult.length);
+      return console.log('список пуст', filterResult, filterResult.length);
     }
     const result = await filter(moviesList, userRequest);
     console.log(result);
-    setSearchResult(result);
+    setFilterResult(result);
     setIsLoading(false);
     setNotFoundMovies(false);
-    if (result.length === 0) {
+    if (result?.length === 0) {
       setNotFoundMovies(true);
     }
   }
 
   async function handleSearchSavedMovie(userRequest) {
-    console.log(userRequest, location, 'handleSearchMovieSTART');
     setIsLoading(true);
-    const full = JSON.parse(localStorage.getItem('favMovieList'));
-    const short = full.filter((movie) => movie.duration <= 40);
-    const moviesList = isShort ? short : full;
+    const moviesList = JSON.parse(localStorage.getItem('favMovieList'));
     if (moviesList.length === 0) {
-      setSearchSavedResult([]);
+      setFilterSavedResult([]);
       setIsLoading(false);
       setNotFoundSavedMovies(true);
-      return console.log('список пуст', searchResult, searchResult.length);
+      return console.log('список пуст');
     }
     const result = await filter(moviesList, userRequest);
-    console.log(result);
-    setSearchSavedResult(result);
+    setFilterSavedResult(result);
     setIsLoading(false);
     setNotFoundSavedMovies(false);
     if (result.length === 0) {
@@ -181,12 +128,11 @@ function App() {
   }
 
   function filter(moviesList, userRequest) {
-    if (!moviesList.length) return console.log('список пуст', moviesList);
+    if (!moviesList?.length) return console.log('список пуст', moviesList);
     const result = moviesList.filter((movie) => {
       const nameRU = movie.nameRU === null ? '' : movie.nameRU.toLowerCase();
       const nameEN = movie.nameEN === null ? '' : movie.nameEN.toLowerCase();
       const description = movie.description === null ? '' : movie.description.toLowerCase();
-      console.log(movie.year, nameRU, nameEN, description);
       if (
         nameRU.includes(userRequest) ||
         nameEN.includes(userRequest) ||
@@ -224,38 +170,22 @@ function App() {
       nameRU,
       nameEN,
     })
-      .then(() => {
-        getMovies()
-          .then((favMovies) => {
-            localStorage.setItem('favMovieList', JSON.stringify(favMovies));
-            setFavList(JSON.parse(localStorage.getItem('favMovieList')));
-            setFavShortList(favList.filter((movie) => movie.duration <= 40));
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+      .then((res) => {
+        setFavList([...favList, res]);
       })
       .catch((err) => console.log(err));
   }
 
   function removeFav(card) {
     removeMovie(card._id)
-      .then((suc) => {
-        getMovies()
-          .then((favMovies) => {
-            localStorage.setItem('favMovieList', JSON.stringify(favMovies));
-            setFavList(JSON.parse(localStorage.getItem('favMovieList')));
-            setFavShortList(favList.filter((movie) => movie.duration <= 40));
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-        console.log('DELETED!');
+      .then(() => {
+        setFavList(favList.filter((favCard) => favCard._id !== card._id));
+        setFilterSavedResult(favList.filter((favCard) => favCard._id !== card._id));
       })
-
       .catch((error) => {
         console.log(error);
       });
+    console.log('DELETED!');
   }
 
   function toggle() {
@@ -266,10 +196,8 @@ function App() {
     setIsDisabledForm(true);
     signin({ email, password })
       .then((user) => {
-        console.log(user);
         setCurrentUser({ email: user.email, name: user.name });
         setLoggedIn(true);
-        initMoviesLists();
         navigate('/movies');
       })
       .catch((err) => {
@@ -282,10 +210,9 @@ function App() {
   function onSignUp({ name, email, password }) {
     setIsDisabledForm(true);
     signup({ name, email, password })
-      .then((answer) => {
+      .then(() => {
         setCurrentUser({ email: email, name: name });
         setLoggedIn(true);
-        initMoviesLists();
         navigate('/movies');
       })
       .catch((err) => {
@@ -294,6 +221,7 @@ function App() {
       })
       .finally(() => setIsDisabledForm(false));
   }
+
 
   function onSignOut() {
     signout()
@@ -327,8 +255,8 @@ function App() {
         value={{
           loggedIn: loggedIn,
           isShort: isShort,
-          searchResult: searchResult,
-          searchSavedResult: searchSavedResult,
+          filterResult: filterResult,
+          filterSavedResult: filterSavedResult,
           isLoading: isLoading,
           isDisabledForm: isDisabledForm,
           authErr: authErr,
@@ -336,6 +264,7 @@ function App() {
           updErr: updErr,
           notFoundMovies: notFoundMovies,
           notFoundSavedMovies: notFoundSavedMovies,
+          favList: favList,
         }}>
         <Routes>
           <Route exact path='/' element={<Main />}></Route>
@@ -348,7 +277,7 @@ function App() {
                   isLoading={isLoading}
                   searchMovie={handleSearchMovie}
                   toggle={toggle}
-                  cards={searchResult}
+                  cards={filterResult}
                   onCardDelete={removeFav}
                   onCardLike={addFav}
                   notFound={notFoundMovies}
@@ -380,7 +309,7 @@ function App() {
                   isLoading={isLoading}
                   searchMovie={handleSearchSavedMovie}
                   toggle={toggle}
-                  cards={searchSavedResult}
+                  cards={filterSavedResult}
                   onCardDelete={removeFav}
                   onCardLike={addFav}
                   notFound={notFoundSavedMovies}

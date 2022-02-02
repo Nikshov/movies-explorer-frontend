@@ -13,7 +13,7 @@ export default function SavedMovies({
   onCardDelete,
   onCardLike,
 }) {
-  const { searchSavedResult, isLoading, notFoundSavedMovies } = React.useContext(AppContext);
+  const { filterSavedResult, isLoading, notFoundSavedMovies } = React.useContext(AppContext);
   return (
     <section className='saved-movies'>
       <Header />
@@ -24,7 +24,7 @@ export default function SavedMovies({
         <span>Ничего не найдено</span>
       ) : (
         <MoviesCardList
-          cards={searchSavedResult}
+          cards={filterSavedResult}
           onCardLike={onCardLike}
           onCardDelete={onCardDelete}
         />
