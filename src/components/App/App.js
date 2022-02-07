@@ -36,6 +36,7 @@ function App() {
   const [isDisabledForm, setIsDisabledForm] = React.useState(false);
 
   const [isShort, setIsShort] = React.useState(false);
+  const [isSavedShort, setIsSavedShort] = React.useState(false);
   const [authErr, setAuthErr] = React.useState(false);
   const [updMessage, setUpdMessage] = React.useState(false);
   const [updErr, setUpdErr] = React.useState(false);
@@ -43,7 +44,6 @@ function App() {
   const [notFoundSavedMovies, setNotFoundSavedMovies] = React.useState(false);
 
   const navigate = useNavigate();
-
 
   React.useEffect(() => {
     if (!loggedIn)
@@ -89,10 +89,10 @@ function App() {
     localStorage.setItem('favMovieList', JSON.stringify(favList));
   }, [favList]);
 
-
   async function handleSearchMovie(userRequest) {
     setIsLoading(true);
-    const moviesList = JSON.parse(localStorage.getItem('fullMovieList'));
+    const list = JSON.parse(localStorage.getItem('fullMovieList'));
+    const moviesList = !isShort ? list : list.filter((movie) => movie.duration <= 40);
     if (moviesList?.length === 0) {
       setFilterResult([]);
       setIsLoading(false);
@@ -111,7 +111,9 @@ function App() {
 
   async function handleSearchSavedMovie(userRequest) {
     setIsLoading(true);
-    const moviesList = JSON.parse(localStorage.getItem('favMovieList'));
+    const list = JSON.parse(localStorage.getItem('favMovieList'));
+    const moviesList = !isSavedShort ? list : list.filter((movie) => movie.duration <= 40);
+
     if (moviesList.length === 0) {
       setFilterSavedResult([]);
       setIsLoading(false);
@@ -180,7 +182,7 @@ function App() {
     removeMovie(card._id)
       .then(() => {
         setFavList(favList.filter((favCard) => favCard._id !== card._id));
-        setFilterSavedResult(favList.filter((favCard) => favCard._id !== card._id));
+        setFilterSavedResult(filterSavedResult.filter((favCard) => favCard._id !== card._id));
       })
       .catch((error) => {
         console.log(error);
@@ -188,8 +190,12 @@ function App() {
     console.log('DELETED!');
   }
 
-  function toggle() {
+  function toggleShort() {
     setIsShort(!isShort);
+  }
+
+  function toggleSavedShort() {
+    setIsSavedShort(!isSavedShort);
   }
 
   function onSignIn({ email, password }) {
@@ -211,9 +217,13 @@ function App() {
     setIsDisabledForm(true);
     signup({ name, email, password })
       .then(() => {
-        setCurrentUser({ email: email, name: name });
-        setLoggedIn(true);
-        navigate('/movies');
+        signin({ email, password })
+          .then(() => {
+            setCurrentUser({ email: email, name: name });
+            setLoggedIn(true);
+            navigate('/movies');
+          })
+    .catch((err) => {console.log(err)})
       })
       .catch((err) => {
         setAuthErr(true);
@@ -221,7 +231,6 @@ function App() {
       })
       .finally(() => setIsDisabledForm(false));
   }
-
 
   function onSignOut() {
     signout()
@@ -233,14 +242,12 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  function handleUpdateUser(name, email) {
+  function handleUpdateUser(email, name) {
     setIsDisabledForm(true);
-    updateUser(name, email)
+    updateUser(email, name)
       .then((res) => {
         setUpdMessage(res.message);
-        getUser().then((user) => {
-          setCurrentUser({ email: user.email, name: user.name }).catch((err) => console.log(err));
-        });
+        setCurrentUser({ email: email, name: name });
       })
       .catch((err) => {
         setUpdErr(err);
@@ -255,6 +262,7 @@ function App() {
         value={{
           loggedIn: loggedIn,
           isShort: isShort,
+          isSavedShort: isSavedShort,
           filterResult: filterResult,
           filterSavedResult: filterSavedResult,
           isLoading: isLoading,
@@ -276,7 +284,7 @@ function App() {
                 <Movies
                   isLoading={isLoading}
                   searchMovie={handleSearchMovie}
-                  toggle={toggle}
+                  toggle={toggleShort}
                   cards={filterResult}
                   onCardDelete={removeFav}
                   onCardLike={addFav}
@@ -308,7 +316,7 @@ function App() {
                 <SavedMovies
                   isLoading={isLoading}
                   searchMovie={handleSearchSavedMovie}
-                  toggle={toggle}
+                  toggle={toggleSavedShort}
                   cards={filterSavedResult}
                   onCardDelete={removeFav}
                   onCardLike={addFav}

@@ -6,12 +6,12 @@ import { useValidation } from '../../utils/useValidation';
 import AppContext from '../../contexts/AppContext';
 
 function Profile({ handleUpdateUser, onSignOut, setUpdMessage, setUpdErr, setIsDisabledForm }) {
-  const { values, handleChange, isValid, setValues, resetForm } = useValidation();
-  const { name, email } = values;
+  const { values, handleChange, isValid, resetForm } = useValidation();
+  let { name, email } = values;
   const [isButtonActive, setIsButtonActive] = React.useState(true);
   const currentUser = React.useContext(UserContext);
   const { updErr, isDisabledForm, updMessage } = React.useContext(AppContext);
-
+  console.log(values);
   React.useEffect(() => {
     setIsDisabledForm(false);
     console.log(name, email)
@@ -21,7 +21,7 @@ function Profile({ handleUpdateUser, onSignOut, setUpdMessage, setUpdErr, setIsD
   function handleSubmit(evt) {
     evt.preventDefault();
     isValid &&
-      handleUpdateUser(name, email);
+      handleUpdateUser((email || currentUser.email), (name || currentUser.name));
     resetForm();
   }
 
@@ -31,6 +31,7 @@ function Profile({ handleUpdateUser, onSignOut, setUpdMessage, setUpdErr, setIsD
     } else {
       setIsButtonActive(false);
     }
+    console.log(isValid, name, email);
   }, [currentUser.email, currentUser.name, email, isValid, name]);
 
   React.useEffect(() => {
@@ -57,15 +58,15 @@ function Profile({ handleUpdateUser, onSignOut, setUpdMessage, setUpdErr, setIsD
             <input
               className='profile__input'
               onChange={handleChange}
-              value={name || ''}
+              defaultValue={currentUser.name || ''}
               placeholder='Имя'
               type='text'
-              name='name-user'
+              name='name'
               minLength='1'
               maxLength='100'
               required
               autoComplete='off'
-              /* disabled={isDisabledForm} */
+              disabled={isDisabledForm}
             />
           </fieldset>
           <fieldset className='profile__input-container'>
@@ -75,15 +76,15 @@ function Profile({ handleUpdateUser, onSignOut, setUpdMessage, setUpdErr, setIsD
             <input
               className='profile__input'
               onChange={handleChange}
-              value={email || ''}
+              defaultValue={currentUser.email || ''}
               placeholder='E-mail'
               type='email'
-              name='name-user'
+              name='email'
               minLength='1'
               maxLength='100'
               required
               autoComplete='off'
-              /* disabled={isDisabledForm} */
+              disabled={isDisabledForm}
             />
           </fieldset>
           <span className={`${updErr ? 'profile__error-msg' : 'profile__upd-msg'}`}>

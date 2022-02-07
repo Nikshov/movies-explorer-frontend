@@ -4,9 +4,10 @@ import Navigation from '../Navigation/Navigation';
 import Logo from '../Logo/Logo';
 import { useLocation, Link } from 'react-router-dom';
 import BurgerButton from '../BurgerButton/BurgerButton';
+import AppContext from '../../contexts/AppContext';
 
 function Header() {
-
+const { loggedIn } = React.useContext(AppContext);
   const [isBurgerOpen, setIsBurgerOpen] = React.useState(false);
   function burgerToggle() {
     setIsBurgerOpen(!isBurgerOpen);
@@ -15,7 +16,7 @@ function Header() {
   return (
     <header className={`header ${location.pathname === '/' ? 'header_landing' : ''}`}>
       <Logo />
-      {location.pathname === '/' ? (
+      {!loggedIn ? (
         <nav className='header__auth'>
           <Link to='/signup' className='header__signup'>
             Регистрация
