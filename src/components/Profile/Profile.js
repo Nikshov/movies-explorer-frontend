@@ -11,17 +11,14 @@ function Profile({ handleUpdateUser, onSignOut, setUpdMessage, setUpdErr, setIsD
   const [isButtonActive, setIsButtonActive] = React.useState(true);
   const currentUser = React.useContext(UserContext);
   const { updErr, isDisabledForm, updMessage } = React.useContext(AppContext);
-  console.log(values);
+
   React.useEffect(() => {
     setIsDisabledForm(false);
-    console.log(name, email)
   }, [email, name, setIsDisabledForm]);
-
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    isValid &&
-      handleUpdateUser((email || currentUser.email), (name || currentUser.name));
+    isValid && handleUpdateUser(email || currentUser.email, name || currentUser.name);
     resetForm();
   }
 
@@ -31,7 +28,6 @@ function Profile({ handleUpdateUser, onSignOut, setUpdMessage, setUpdErr, setIsD
     } else {
       setIsButtonActive(false);
     }
-    console.log(isValid, name, email);
   }, [currentUser.email, currentUser.name, email, isValid, name]);
 
   React.useEffect(() => {
