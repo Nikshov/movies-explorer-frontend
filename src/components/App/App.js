@@ -32,7 +32,6 @@ import {
   numberShowCardsShort,
   numberAddMoarCardsLarge,
   numberAddMoarCardsMedium,
-  numberAddMoarCardsShort,
 } from '../../utils/const';
 
 function App() {
@@ -62,20 +61,14 @@ function App() {
   );
 
   const [numberAddMoarCards, setNumberAddMoarCards] = React.useState(
-    window.innerWidth > LARGEWIDTH
-      ? numberAddMoarCardsLarge
-      : window.innerWidth > MEDIUMWIDTH
-      ? numberAddMoarCardsMedium
-      : numberAddMoarCardsShort,
+    window.innerWidth > LARGEWIDTH ? numberAddMoarCardsLarge : numberAddMoarCardsMedium,
   );
 
   window.onresize = () => {
     if (window.innerWidth > LARGEWIDTH) {
       setNumberAddMoarCards(numberAddMoarCardsLarge);
-    } else if (window.innerWidth > MEDIUMWIDTH) {
-      setNumberAddMoarCards(numberAddMoarCardsMedium);
     } else {
-      setNumberAddMoarCards(numberAddMoarCardsShort);
+      setNumberAddMoarCards(numberAddMoarCardsMedium);
     }
   };
 
