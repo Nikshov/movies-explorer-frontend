@@ -23,6 +23,17 @@ import { getMoviesList } from '../../utils/MoviesApi';
 import UserContext from '../../contexts/UserContext';
 import AppContext from '../../contexts/AppContext';
 import { Auth } from '../../utils/Auth';
+import {
+  SHORT,
+  LARGEWIDTH,
+  MEDIUMWIDTH,
+  numberShowCardsLarge,
+  numberShowCardsMedium,
+  numberShowCardsShort,
+  numberAddMoarCardsLarge,
+  numberAddMoarCardsMedium,
+  numberAddMoarCardsShort,
+} from '../../utils/const';
 
 function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
@@ -42,6 +53,31 @@ function App() {
   const [updErr, setUpdErr] = React.useState(false);
   const [notFoundMovies, setNotFoundMovies] = React.useState(false);
   const [notFoundSavedMovies, setNotFoundSavedMovies] = React.useState(false);
+  const [numberShowCards, setNumberShowCards] = React.useState(
+    window.innerWidth > LARGEWIDTH
+      ? numberShowCardsLarge
+      : window.innerWidth > MEDIUMWIDTH
+      ? numberShowCardsMedium
+      : numberShowCardsShort,
+  );
+
+  const [numberAddMoarCards, setNumberAddMoarCards] = React.useState(
+    window.innerWidth > LARGEWIDTH
+      ? numberAddMoarCardsLarge
+      : window.innerWidth > MEDIUMWIDTH
+      ? numberAddMoarCardsMedium
+      : numberAddMoarCardsShort,
+  );
+
+  window.onresize = () => {
+    if (window.innerWidth > LARGEWIDTH) {
+      setNumberAddMoarCards(numberAddMoarCardsLarge);
+    } else if (window.innerWidth > MEDIUMWIDTH) {
+      setNumberAddMoarCards(numberAddMoarCardsMedium);
+    } else {
+      setNumberAddMoarCards(numberAddMoarCardsShort);
+    }
+  };
 
   const navigate = useNavigate();
 
@@ -64,7 +100,6 @@ function App() {
     getMovies()
       .then((movies) => {
         setFavList(movies);
-        console.log(movies);
       })
       .catch((err) => {
         console.log(err);
@@ -92,7 +127,7 @@ function App() {
   async function handleSearchMovie(userRequest) {
     setIsLoading(true);
     const list = JSON.parse(localStorage.getItem('fullMovieList'));
-    const moviesList = !isShort ? list : list.filter((movie) => movie.duration <= 40);
+    const moviesList = !isShort ? list : list.filter((movie) => movie.duration <= SHORT);
     if (moviesList?.length === 0) {
       setFilterResult([]);
       setIsLoading(false);
@@ -100,7 +135,6 @@ function App() {
       return console.log('список пуст', filterResult, filterResult.length);
     }
     const result = await filter(moviesList, userRequest);
-    console.log(result);
     setFilterResult(result);
     setIsLoading(false);
     setNotFoundMovies(false);
@@ -112,7 +146,7 @@ function App() {
   async function handleSearchSavedMovie(userRequest) {
     setIsLoading(true);
     const list = JSON.parse(localStorage.getItem('favMovieList'));
-    const moviesList = !isSavedShort ? list : list.filter((movie) => movie.duration <= 40);
+    const moviesList = !isSavedShort ? list : list.filter((movie) => movie.duration <= SHORT);
 
     if (moviesList.length === 0) {
       setFilterSavedResult([]);
@@ -223,7 +257,9 @@ function App() {
             setLoggedIn(true);
             navigate('/movies');
           })
-    .catch((err) => {console.log(err)})
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         setAuthErr(true);
@@ -240,6 +276,10 @@ function App() {
         navigate('/');
       })
       .catch((err) => console.log(err));
+  }
+
+  function onMoarButton() {
+    setNumberShowCards(numberShowCards + numberAddMoarCards);
   }
 
   function handleUpdateUser(email, name) {
@@ -273,6 +313,9 @@ function App() {
           notFoundMovies: notFoundMovies,
           notFoundSavedMovies: notFoundSavedMovies,
           favList: favList,
+          onMoarButton: onMoarButton,
+          numberShowCards: numberShowCards,
+          numberAddMoarCards: numberAddMoarCards,
         }}>
         <Routes>
           <Route exact path='/' element={<Main />}></Route>

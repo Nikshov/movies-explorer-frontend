@@ -6,13 +6,9 @@ import Footer from './../Footer/Footer';
 import Preloader from '../Preloader/Preloader';
 import './SavedMovies.css';
 import AppContext from '../../contexts/AppContext';
+import NotFoundMovies from '../NotFoundMovies/NotFoundMovies';
 
-export default function SavedMovies({
-  searchMovie,
-  toggle,
-  onCardDelete,
-  onCardLike,
-}) {
+export default function SavedMovies({ searchMovie, toggle, onCardDelete, onCardLike }) {
   const { filterSavedResult, isLoading, notFoundSavedMovies } = React.useContext(AppContext);
   return (
     <section className='saved-movies'>
@@ -21,7 +17,7 @@ export default function SavedMovies({
       {isLoading ? (
         <Preloader />
       ) : notFoundSavedMovies ? (
-        <span>Ничего не найдено</span>
+        <NotFoundMovies />
       ) : (
         <MoviesCardList
           cards={filterSavedResult}

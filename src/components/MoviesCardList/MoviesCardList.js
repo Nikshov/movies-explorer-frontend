@@ -1,27 +1,17 @@
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import React from 'react';
+import AppContext from '../../contexts/AppContext';
 
-function MoviesCardList({ cards, onCardDelete, onCardLike }) {
+function MoviesCardList({ cards, onCardDelete, onCardLike, }) {
 
-  const [numberShowCards, setNumberShowCards] = React.useState(
-    window.innerWidth > 945 ? 12 : window.innerWidth > 600 ? 8 : 5,
-  );
+  const { onMoarButton, numberShowCards, } = React.useContext(AppContext);
 
-  const [numberAddMoarCards, setNumberAddMoarCards] = React.useState(
-    window.innerWidth > 945 ? 3 : 2,
-  );
+  
 
-  window.onresize = () => {
-    if (window.innerWidth > 945) {
-      setNumberAddMoarCards(3);
-    } else {
-      setNumberAddMoarCards(2);
-    }
-  };
-
-  function handleMoar() {
-    setNumberShowCards(numberShowCards + numberAddMoarCards);
+  function handleMoarButton(evt) {
+    evt.preventDefault();
+    onMoarButton();
   }
 
   return (
@@ -41,7 +31,7 @@ function MoviesCardList({ cards, onCardDelete, onCardLike }) {
         ) : null}
       </div>
       {numberShowCards >= cards?.length ? null : (
-        <button className='cardList__moar-button' onClick={handleMoar} type='button'>
+        <button className='cardList__moar-button' onClick={handleMoarButton} type='button'>
           Ещё
         </button>
       )}
