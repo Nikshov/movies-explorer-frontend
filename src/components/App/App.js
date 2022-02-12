@@ -35,7 +35,9 @@ import {
 } from '../../utils/const';
 
 function App() {
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [loggedIn, setLoggedIn] = React.useState(
+    localStorage.getItem('isLoggedIn') ? localStorage.getItem('isLoggedIn') : false,
+  );
   const [currentUser, setCurrentUser] = React.useState({});
   const [fullList, setFullList] = React.useState([]);
   const [favList, setFavList] = React.useState([]);
@@ -75,28 +77,33 @@ function App() {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    if (!loggedIn)
-      checkAuth()
-        .then(() => {
-          setLoggedIn(true);
-          navigate('/movies');
-          getUser()
-            .then((user) => {
-              setCurrentUser({ email: user.email, name: user.name });
-            })
-            .catch((err) => console.log(err));
-        })
-        .catch((err) => console.log(err));
-  }, [loggedIn, navigate]);
+    setTimeout(
+      () =>
+        getUser()
+          .then((user) => {
+            setCurrentUser({ email: user.email, name: user.name });
+          })
+          .catch((err) => console.log(err)),
+      200,
+    );
+  }, []);
 
   React.useEffect(() => {
-    getMovies()
-      .then((movies) => {
-        setFavList(movies);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    setTimeout(onCheckAuth, 500);
+  }, []);
+
+  React.useEffect(() => {
+    setTimeout(
+      () =>
+        getMovies()
+          .then((movies) => {
+            setFavList(movies);
+          })
+          .catch((err) => {
+            console.log(err);
+          }),
+      400,
+    );
   }, []);
 
   React.useEffect(() => {
@@ -117,6 +124,18 @@ function App() {
     localStorage.setItem('favMovieList', JSON.stringify(favList));
   }, [favList]);
 
+  function onCheckAuth() {
+    checkAuth()
+      .then(() => {
+        setLoggedIn(true);
+        localStorage.setItem('isLoggedIn', true);
+        return true;
+      })
+      .catch((err) => {
+        return false;
+      });
+  }
+
   async function handleSearchMovie(userRequest) {
     setIsLoading(true);
     const list = JSON.parse(localStorage.getItem('fullMovieList'));
@@ -125,7 +144,7 @@ function App() {
       setFilterResult([]);
       setIsLoading(false);
       setNotFoundMovies(true);
-      return console.log('список пуст', filterResult, filterResult.length);
+      return;
     }
     const result = await filter(moviesList, userRequest);
     setFilterResult(result);
@@ -231,13 +250,16 @@ function App() {
       .then((user) => {
         setCurrentUser({ email: user.email, name: user.name });
         setLoggedIn(true);
+        localStorage.setItem('isLoggedIn', true);
         navigate('/movies');
       })
       .catch((err) => {
         setAuthErr(true);
         console.log(err);
       })
-      .finally(() => setIsDisabledForm(false));
+      .finally(() => {
+        setIsDisabledForm(false);
+      });
   }
 
   function onSignUp({ name, email, password }) {
@@ -248,6 +270,7 @@ function App() {
           .then(() => {
             setCurrentUser({ email: email, name: name });
             setLoggedIn(true);
+            localStorage.setItem('isLoggedIn', true);
             navigate('/movies');
           })
           .catch((err) => {
@@ -266,6 +289,7 @@ function App() {
       .then(() => {
         setLoggedIn(false);
         setCurrentUser({});
+        localStorage.clear();
         navigate('/');
       })
       .catch((err) => console.log(err));
@@ -316,7 +340,7 @@ function App() {
             exact
             path='/movies'
             element={
-              <Auth redirectTo='/' loggedIn={loggedIn}>
+              <Auth redirectTo='/' loggedIn={loggedIn} onCheckAuth={onCheckAuth}>
                 <Movies
                   isLoading={isLoading}
                   searchMovie={handleSearchMovie}
@@ -332,7 +356,7 @@ function App() {
             exact
             path='/profile'
             element={
-              <Auth redirectTo='/' loggedIn={loggedIn}>
+              <Auth redirectTo='/' loggedIn={loggedIn} onCheckAuth={onCheckAuth}>
                 <Profile
                   handleUpdateUser={handleUpdateUser}
                   onSignOut={onSignOut}
@@ -348,7 +372,7 @@ function App() {
             exact
             path='/saved-movies'
             element={
-              <Auth redirectTo='/' loggedIn={loggedIn}>
+              <Auth redirectTo='/' loggedIn={loggedIn} onCheckAuth={onCheckAuth}>
                 <SavedMovies
                   isLoading={isLoading}
                   searchMovie={handleSearchSavedMovie}

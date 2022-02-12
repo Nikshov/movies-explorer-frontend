@@ -84,7 +84,7 @@ function Profile({ handleUpdateUser, onSignOut, setUpdMessage, setUpdErr, setIsD
             />
           </fieldset>
           <span className={`${updErr ? 'profile__error-msg' : 'profile__upd-msg'}`}>
-            {updMessage ? `${updMessage}` : `Что пошло не так... `}
+            {updMessage ? `${updMessage}` : updErr ? `Что пошло не так... ` : ''}
           </span>
         </form>
         <button
