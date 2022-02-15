@@ -141,5 +141,13 @@ export function checkAuth() {
   return fetch(`${mainApiBaseUrl}/users/me`, {
     method: 'POST',
     credentials: 'include',
-  }).then(res => checkResponse(res));
+  }).then((res) => {
+    if (res.ok) {
+    return true;
+    }
+    if (res.status === 401) {
+      return false;
+    }
+  return Promise.reject(identifyError(res.status));
+  });
 }

@@ -126,13 +126,14 @@ function App() {
 
   function onCheckAuth() {
     checkAuth()
-      .then(() => {
-        setLoggedIn(true);
-        localStorage.setItem('isLoggedIn', true);
-        return true;
+      .then((res) => {
+        setLoggedIn(res);
+        console.log(res);
+        localStorage.setItem('isLoggedIn', res);
+        return res;
       })
       .catch((err) => {
-        return false;
+        console.log(err);
       });
   }
 
