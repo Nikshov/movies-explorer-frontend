@@ -31,6 +31,14 @@
   overflow: hidden;
 }
 
+.card__link {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  width: 100%;
+  height: 100%;
+}
+
 .card__fav-button {
   background: url('../../images/favButton.svg');
 }

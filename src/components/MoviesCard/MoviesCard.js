@@ -53,7 +53,9 @@ function MoviesCard({ card, onCardLike, onCardDelete }) {
           <button onClick={handleDelClick} className='card__delete-button card__button' />
         )}
       </div>
-      <img className='card__img' src={source} alt='обложка фильма' />
+      <a className='card__link' target='_blank' rel='noopener noreferrer' href={card.trailerLink ? card.trailerLink : card.trailer}>
+        <img className='card__img' src={ source } alt='обложка фильма' />
+        </a>
     </div>
   );
 }
