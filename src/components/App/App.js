@@ -128,7 +128,6 @@ function App() {
     checkAuth()
       .then((res) => {
         setLoggedIn(res);
-        console.log(res);
         localStorage.setItem('isLoggedIn', res);
         return res;
       })
