@@ -340,7 +340,7 @@ function App() {
             exact
             path='/movies'
             element={
-              <Auth redirectTo='/' loggedIn={loggedIn} onCheckAuth={onCheckAuth}>
+              <Auth redirectTo='/' loggedIn={loggedIn}>
                 <Movies
                   isLoading={isLoading}
                   searchMovie={handleSearchMovie}
@@ -356,7 +356,7 @@ function App() {
             exact
             path='/profile'
             element={
-              <Auth redirectTo='/' loggedIn={loggedIn} onCheckAuth={onCheckAuth}>
+              <Auth redirectTo='/' loggedIn={loggedIn}>
                 <Profile
                   handleUpdateUser={handleUpdateUser}
                   onSignOut={onSignOut}
@@ -372,7 +372,7 @@ function App() {
             exact
             path='/saved-movies'
             element={
-              <Auth redirectTo='/' loggedIn={loggedIn} onCheckAuth={onCheckAuth}>
+              <Auth redirectTo='/' loggedIn={loggedIn}>
                 <SavedMovies
                   isLoading={isLoading}
                   searchMovie={handleSearchSavedMovie}
