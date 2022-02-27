@@ -11,7 +11,7 @@ export default function Footer() {
       </div>
 
       <div className="footer__block-content">
-        <p className="footer__copyright">&copy; 2021</p>
+        <p className="footer__copyright">&copy; 2022</p>
         <nav className="footer-links">
           <li className="footer-links__item">
             <a
