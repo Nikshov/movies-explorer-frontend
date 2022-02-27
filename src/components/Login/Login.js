@@ -1,31 +1,61 @@
 import './Login.css';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '../Logo/Logo';
+import { useValidation } from '../../utils/useValidation';
+import AppContext from '../../contexts/AppContext';
 
-function Login() {
+function Login({ signin, setAuthErr, setIsDisabledForm }) {
+  const { values, handleChange, isValid, resetForm } = useValidation();
+  const { email, password } = values;
+  const { isDisabledForm, authErr } = React.useContext(AppContext);
+
+  React.useEffect(() => {
+    return () => {
+      setAuthErr(false);
+      setIsDisabledForm(false);
+    };
+  }, [setAuthErr, setIsDisabledForm]);
+
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    if (!email || !password) {
+      return;
+    }
+    isValid && signin({ password: password, email: email });
+    resetForm();
+  }
+
   return (
     <section className='login'>
       <div className='login__head'>
         <Logo />
         <h1 className='login__greeting'>Добро пожаловать!</h1>
       </div>
-      
-      <form className='login__form'>
+
+      <form className='login__form' onSubmit={handleSubmit}>
         <span className='login__input-span'>E-mail</span>
         <input
           className='login__input'
           name='email'
           type='email'
+          value={email || ''}
           required
-          autoComplete='off'></input>
+          onChange={handleChange}
+          autoComplete='off'
+          disabled={isDisabledForm}></input>
 
         <span className='login__input-span'>Пароль</span>
         <input
           className='login__input login__input_error'
           name='password'
           type='password'
+          value={password || ''}
+          onChange={handleChange}
           required
-          autoComplete='off'></input>
+          autoComplete='off'
+          disabled={isDisabledForm}></input>
+        <span className='login__error-msg'>{authErr ? 'Что-то пошло не так...' : ''}</span>
 
         <button className='login__submit-button' type='submit'>
           Войти

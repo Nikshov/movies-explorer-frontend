@@ -56,6 +56,13 @@
   box-sizing: border-box;
 }
 
+.login__error-msg {
+  font-size: 10px;
+  line-height: 12px;
+  color: #ee3465;
+  margin-top: 10px;
+}
+
 .login__submit-button {
   width: 100%;
   max-width: 396px;
